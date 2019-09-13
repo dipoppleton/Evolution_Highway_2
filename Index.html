@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "UTF-8">
+		<title>"EVOLUTION HIGHWAY"</title>
+		<script src="Blocks.json"></script>
+    <script src="Species_Details.json"></script>
+    <style>		
+	/* Header details */
+	.header {overflow: hidden;background-color: #404040;padding: 20px 10px; }
+	.header a {float: left;text-align: center;padding: 12px;text-decoration: none;font-size: 18px; line-height: 25px;border-radius: 4px;color: #e6e6e6;}
+	.header-right {float: right;}
+	.header a.logo {font-size: 25px;font-weight: bold;color: #99bbff;}	
+	/* Refrence Selecention Details */
+	.container-l {float: left;width: 46%;height: 350px; background-color: rgb(230, 230, 233);padding: 20px 10px;box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1), 0 4px 4px 0 rgba(0, 0, 0, 0.15);}
+	.container-r {float: right;width: 46%;height: 350px;background-color: rgb(230, 230, 233);padding: 20px 10px;box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1), 0 4px 4px 0 rgba(0, 0, 0, 0.15);}
+	.selecthead {text-align: center;font-size: 20px;font-weight: 600;font-family: 'Open Sans', sans-serif;color: rgb(116, 124, 142);}
+	.box {height: 300px;padding: 20px 10px;color: rgb(116, 124, 142);font-size: 15px;overflow: auto;}
+	.chrcontain {position: relative;width: 100%;height: 400px;overflow-y: scroll;}
+	.que-button-not-selected {background-color: #000000;width:100%;border: none; height=10px;color: white;padding: 10px 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;outline:0;}
+	.que-button-selected {background-color: #800000;width:100%;border: none; height=10px;color: white;padding: 10px 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;outline:0;}
+	.ref-button-not-selected {background-color: #000000;width:100%;border: none; height=10px;color: white;padding: 10px 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;outline:0;}
+	.ref-button-selected {background-color: #4CAF50;width:100%;border: none; height=10px;color: white;padding: 10px 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;outline:0;}
+	.button-hover {background-color: white;width:100%;border: none; height=10px;color: black;padding: 10px 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;outline:0;}
+	.button-select-all {background-color: #000000;border: none; height=10px;color: white;padding: 5px 5px;text-align: center;text-decoration: none;display: inline-block;font-size: 14px;cursor: pointer;outline:0}
+	.column {float: left;width: 50%;}
+	.column2 {float: left;width: 40%;padding-top: 20px;text-align:center;}
+	.column3{float: left;width: 10%;padding-top: 20px;text-align:center;}
+	/* Clear floats after the columns */
+	.row:after {content: "";display: table;clear: both;}
+	.buttoncontainer {padding-top: 20px,padding-bottom: 20px;width:60}
+	.VISUALIZE {width:100%;background-color: blue;border: 1; height=10px;color: white;padding: 5px 5px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;cursor: pointer;outline:0}
+	.HEAD_VIS{text-align: left;font-size: 20px;font-weight: 600;font-family: 'Open Sans', sans-serif;color: rgb(116, 124, 142);}
+	.HEAD_HID{color: white}
+	
+		</style>
+		</head>
+   <body>
+<!--    This section presents all of the header details. Woop Woop. -->
+		<div class="header" id = "Title">
+ 		 <a href="#default" class="logo">Evolution Highway</a>
+ 			 <div class="header-right">
+   			 <a class="active" href="#home">Help</a>
+  			  <a href="https://www.rvc.ac.uk/about/our-people/denis-larkin#tab-research">About Our Lab</a>
+  			</div>
+     	</div>
+     	<div class="row">
+<!--   Refrence Selection   	 -->
+			<div class="container-l">
+			  <div class="selecthead">Reference Selection</div>
+			  <div class="box">
+				<ul id = "Refrences">
+				</ul>
+			  </div>
+			</div>
+
+	<!-- Query listing -->
+			<div class="container-r">
+			  <div class="selecthead">Query Selection</div>
+			  <div class="box">
+				<ul id = "Queries">
+				</ul>
+			  </div>
+			</div>
+<!--    This section presents all of the Refrence Chromosomes. womp womp. -->
+     	</div >
+		<div>
+		<div id="row">
+  			  <div class="column3"></div>			
+		  	  <div id="selecthead" class="column2"><text class="selecthead">Chromosme Selection</text></div>
+  			  <div id="SA_BUTTON" class="column2"></div>
+  			  <div class="column3"></div>			
+		</div>
+		<div id="RefChromosomes_box" class="chrcontain">
+			<svg id="RefChromosomes" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="300" class="chrbox"></svg>
+		</div>
+    <div class="row">
+     	<div class="column2"></div>			
+		<div id="OPEN_WINDOW" class="buttoncontainer">    </div>
+  		<div class="column2"></div>			
+    </div>
+     <div class="row">
+  	  	<div class="column">
+     		<div id="ca1" class="HEAD_HID">SELECTED CHROMOSOMES</div> 	  	  
+   	  		<div id="SELECTED_CHROMOSOMES"></div> 	  
+  	  	</div>
+  	  	<div class="column">
+     		<div id="ca2" class="HEAD_HID">SELECTED SPECIES</div> 	  	  
+   	  		<div id="SELECTED_SPECIES"></div> 	  
+  	  	</div>
+ 	</div>
+ 	
+ 	
+	<script>
+// Get all the refrences from Block.json
+
+var Refrence_Taxids = [];
+var Selected_Ref_taxa="";
+var Selected_Que_taxa=[];
+var Selected_Chr=[];
+var Queries_avail=[];
+var Chr_avail=[];
+// #######################################
+// This function lists all of the data into Selected Chrome and selected 
+function OUTPUT_DATA(){
+	document.getElementById("ca1").setAttribute("class", "HEAD_VIS");
+	document.getElementById("ca2").setAttribute("class", "HEAD_VIS");
+	var full_list="";
+	var outputarea = document.getElementById("SELECTED_CHROMOSOMES");
+	for(var L=0; L<SELECTED.length; ++L){
+		 full_list = full_list + SELECTED[L]+ "<br>";
+	} 
+	outputarea.innerHTML=full_list;
+	var outputarea = document.getElementById("SELECTED_SPECIES");
+	var full_list = "";
+	for(var L=0; L<Selected_Que_taxa.length; ++L){
+		var anothertest=false;
+		var namer = Selected_Que_taxa[L].substr(1); 
+		Species_details.forEach(function (arrayItem) {
+		if (arrayItem.Taxid ==namer){
+			btn.innerHTML = arrayItem.Name;
+			full_list = full_list + arrayItem.Name+ "<br>";
+			anothertest=true;
+			}
+		});
+// On Click
+		if (anothertest==false){
+			 full_list = full_list + namer+ "<br>";
+		}
+	} 
+	outputarea.innerHTML=full_list;
+}
+
+// #######################################
+// Populate Refrence List
+Blocks_DB.forEach(function (arrayItem) {
+    var x = "R" + arrayItem.Taxid;
+    Refrence_Taxids.push(x);
+});
+for (var i = 0; i < Refrence_Taxids.length; i++) {
+// Create Button
+	var btn = document.createElement("BUTTON");
+// 	Make Taxid the ID
+	btn.setAttributeNS(null,"id",Refrence_Taxids[i]);
+	btn.setAttributeNS(null,"class","ref-button-not-selected");
+// 	ADD TEXT
+	btn.innerHTML = Refrence_Taxids[i].substr(1); 
+	Species_details.forEach(function (arrayItem) {
+	if (arrayItem.Taxid ==Refrence_Taxids[i].substr(1)){
+		btn.innerHTML = arrayItem.Name;
+		}
+	});
+// On Click
+	btn.onclick = function(){
+		var a = document.getElementById(this.id);
+		// See if it is Refrence. If so change it to red
+		if (Selected_Ref_taxa == "") {
+			Selected_Ref_taxa=a.id;
+			a.setAttributeNS(null,"class","ref-button-selected");	
+		}else{
+			document.getElementById(Selected_Ref_taxa).setAttributeNS(null,"class","ref-button-not-selected");
+			Selected_Ref_taxa=a.id;
+			a.setAttributeNS(null,"class","ref-button-selected");
+	}
+// 	Run Query Population function
+	Populate_Queries();
+// 	Run Chromosome Population function
+	Draw_Chromosomes();
+// 	CREATE BUTTON FOR NEW WINDOW
+	Create_Button();
+	OUTPUT_DATA();
+	}
+// 	on mouseover
+	btn.onmouseover = function(){
+		var a = document.getElementById(this.id);	
+		if (Selected_Ref_taxa != a.id) {
+			a.setAttributeNS(null,"class","button-hover");	
+		}	
+	};
+// on mousexit
+	btn.onmouseout = function(){
+		var a = document.getElementById(this.id);
+		if (Selected_Ref_taxa == a.id) {
+			a.setAttributeNS(null,"class","ref-button-selected");	
+		}else{
+			a.setAttributeNS(null,"class","ref-button-not-selected");
+		}		
+	};
+// Add the button
+    document.getElementById("Refrences").appendChild(btn);  
+}
+
+// #######################################
+// ADD QUERIES FUNCTION
+
+function Populate_Queries(){
+// Remove previous containers
+	const tempnode=document.getElementById("Queries");
+  	while (tempnode.firstChild) {
+    		tempnode.removeChild(tempnode.firstChild);
+  	}	
+	Selected_Que_taxa=[];
+	Queries_avail=[];
+	var Refrence_data=[];
+	Blocks_DB.forEach(function (arrayItem) {
+		if(arrayItem.Taxid==Selected_Ref_taxa.substr(1)){
+   			Refrence_data=arrayItem.Alignments;
+		}
+	});
+	Refrence_data.forEach(function (arrayItem) {
+    var x = "Q" + arrayItem.Qid;
+  	  Queries_avail.push(x);
+    });
+// Add buttons
+	for (var i = 0; i < Queries_avail.length; i++) {
+// Create Button
+		var btn = document.createElement("BUTTON");
+// 	Make Taxid the ID
+		btn.setAttributeNS(null,"id",Queries_avail[i]);
+		btn.setAttributeNS(null,"class","que-button-not-selected");
+// 	ADD TEXT
+		btn.innerHTML = Queries_avail[i].substr(1); 
+
+		Species_details.forEach(function (arrayItem) {
+		if (arrayItem.Taxid ==Queries_avail[i].substr(1)){
+			btn.innerHTML = arrayItem.Name;
+			}
+		});
+// On Click
+		btn.onclick = function(){
+		var a = document.getElementById(this.id);
+// 		See if it is in the array  If so remove it
+			if (Selected_Que_taxa.includes(a.id)){
+				a.setAttributeNS(null,"class","que-button-not-selected");	
+				var index = Selected_Que_taxa.indexOf(a.id);
+				if (index > -1) {
+ 					Selected_Que_taxa.splice(index, 1);
+				}
+			}else{
+				Selected_Que_taxa.push(a.id);
+				a.setAttributeNS(null,"class","que-button-selected");	
+			}
+			OUTPUT_DATA();
+	}
+// 	on mouseover
+	btn.onmouseover = function(){
+		var a = document.getElementById(this.id);	
+			if (Selected_Que_taxa.includes(a.id)){
+			}else{
+				a.setAttributeNS(null,"class","button-hover");	
+			}
+		}	
+// on mousexit
+		btn.onmouseout = function(){
+			var a = document.getElementById(this.id);
+			if (Selected_Que_taxa.includes(a.id)){
+				a.setAttributeNS(null,"class","que-button-selected");	
+			}else{
+				a.setAttributeNS(null,"class","que-button-not-selected");
+			}		
+		};
+// Add the button
+    document.getElementById("Queries").appendChild(btn);  
+	}
+	
+
+}
+
+// #######################################
+var svgNS = "http://www.w3.org/2000/svg";  
+var Chromosomes = [];
+var Positions = [];
+//This is the output
+const SELECTED = [];
+// select all chromosomes;
+
+var buttono = document.createElement("BUTTON");
+buttono.innerHTML = "Select All Chromsomes"; 
+buttono.setAttributeNS(null,"id","chrometitle");
+buttono.setAttributeNS(null,"class","button-select-all");
+
+// On Click
+buttono.onclick = function(){
+	var selectedtest=1;;
+	for (var i = 0; i < Length; i++) {
+		var chro=document.getElementById(Chromosomes[i]);
+		if (chro.getAttribute("fill") == "#D3D3D3") {
+			chro.setAttributeNS(null,"fill","red");
+			selectedtest=true;
+			SELECTED.push(chro.id);
+		}else{
+			selectedtest++;
+		}		
+	}
+	if (selectedtest>=Length){
+		for (var i = 0; i < Length; i++) {
+			var chro=document.getElementById(Chromosomes[i]);		
+			chro.setAttributeNS(null,"fill","#D3D3D3");
+			var index = SELECTED.indexOf(chro.id);
+			SELECTED.splice(index, 1);  
+		}
+    }
+	OUTPUT_DATA();
+}
+document.getElementById("SA_BUTTON").appendChild(buttono);  
+
+// #######################################
+function Draw_Chromosomes(){
+    SELECTED.length = 0;
+	document.getElementById("SELECTED_CHROMOSOMES").innerHTML = "";
+	while (document.getElementById("RefChromosomes").lastChild) {
+   		document.getElementById("RefChromosomes").removeChild(document.getElementById("RefChromosomes").lastChild);
+	}
+	Chromosomes = [];
+	Positions = [];
+	var tempchrome;
+	Blocks_DB.forEach(function (arrayItem) {
+		if(arrayItem.Taxid==Selected_Ref_taxa.substr(1)){
+   			tempchrome=arrayItem.Chromosomes;
+		}
+	});
+	tempchrome.forEach(function (arrayItem) {
+  	  Chromosomes.push(arrayItem.ChrID);
+  	  Positions.push(arrayItem.ChrLength);
+    });
+
+    Length = Positions.length;
+    Largest= Math.max.apply(Math, Positions);
+		var tempwidth=30;
+		var space=1.2;
+		var tempx=25+space*tempwidth;	
+			
+			        	//Make box the proper size
+			var newidth=space*tempwidth*Length*1.1;
+			document.getElementById("RefChromosomes").style.width = newidth;
+			//Draw farY axis
+        	var myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",newidth);
+       		 	myline.setAttributeNS(null,"y1",5);
+            	myline.setAttributeNS(null,"x2",newidth);
+            	myline.setAttributeNS(null,"y2",250);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+                document.getElementById("RefChromosomes").appendChild(myline); 			
+			
+			//Draw Y axis
+        		myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",50);
+       		 	myline.setAttributeNS(null,"y1",5);
+            	myline.setAttributeNS(null,"x2",50);
+            	myline.setAttributeNS(null,"y2",250);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+                document.getElementById("RefChromosomes").appendChild(myline);   			
+			
+        	//Draw X axis
+        	myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",45);
+       		 	myline.setAttributeNS(null,"y1",250);
+            	myline.setAttributeNS(null,"x2",100000);
+            	myline.setAttributeNS(null,"y2",250);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+                document.getElementById("RefChromosomes").appendChild(myline);			
+			
+	        //Draw Top dotted line
+		        myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",45);
+       		 	myline.setAttributeNS(null,"y1",5);
+            	myline.setAttributeNS(null,"x2",100000);
+            	myline.setAttributeNS(null,"y2",5);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+				myline.setAttributeNS(null,"stroke-dasharray","4 4");
+                document.getElementById("RefChromosomes").appendChild(myline);	
+		
+	        //Draw twothird dotted line
+		        myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",45);
+       		 	myline.setAttributeNS(null,"y1",82);
+            	myline.setAttributeNS(null,"x2",100000);
+            	myline.setAttributeNS(null,"y2",82);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+				myline.setAttributeNS(null,"stroke-dasharray","4 4");
+                document.getElementById("RefChromosomes").appendChild(myline);				
+				
+		        //Draw onethird dotted line
+		        myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",45);
+       		 	myline.setAttributeNS(null,"y1",163);
+            	myline.setAttributeNS(null,"x2",100000);
+            	myline.setAttributeNS(null,"y2",163);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+				myline.setAttributeNS(null,"stroke-dasharray","4 4");
+                document.getElementById("RefChromosomes").appendChild(myline);		
+                
+                //Draw Y labeL	
+        	var mytext = document.createElementNS(svgNS,"text"); 
+            	mytext.setAttributeNS(null,"x",5);
+       		 	mytext.setAttributeNS(null,"y",125);
+       		 	mytext.setAttributeNS(null,"font-size","12px");       		 	
+            	mytext.innerHTML = "Mbp";
+            	document.getElementById("RefChromosomes").appendChild(mytext);        	
+		//Calculate labels
+			var Tick1=Largest;
+			Tick1=Tick1/3000000;
+			Tick1=Math.round(Tick1);
+			var Tick2=Largest;
+			Tick2=Tick1*2;
+			Tick2=Math.round(Tick2);
+			var Tick3=Largest;
+			Tick3=Tick3/1000000;
+			Tick3=Math.round(Tick3);
+
+        //Draw top tick	label
+        		mytext = document.createElementNS(svgNS,"text"); 
+            	mytext.setAttributeNS(null,"x",25);
+       		 	mytext.setAttributeNS(null,"y",10);
+       		 	mytext.setAttributeNS(null,"font-size","10px");       		 	
+            	mytext.innerHTML = Tick3;
+            	document.getElementById("RefChromosomes").appendChild(mytext); 
+	
+    	//Draw twothird tick label		
+        		mytext = document.createElementNS(svgNS,"text"); 
+            	mytext.setAttributeNS(null,"x",25);
+       		 	mytext.setAttributeNS(null,"y",85);
+       		 	mytext.setAttributeNS(null,"font-size","10px");       		 	
+            	mytext.innerHTML = Tick2;
+            	document.getElementById("RefChromosomes").appendChild(mytext); 	
+        	
+        //Draw onethird tick label		
+        		mytext = document.createElementNS(svgNS,"text"); 
+            	mytext.setAttributeNS(null,"x",25);
+       		 	mytext.setAttributeNS(null,"y",166);
+       		 	mytext.setAttributeNS(null,"font-size","10px");       		 	
+            	mytext.innerHTML = Tick1;
+            	document.getElementById("RefChromosomes").appendChild(mytext); 
+            	
+        //Draw bottom tick label		
+        		mytext = document.createElementNS(svgNS,"text"); 
+            	mytext.setAttributeNS(null,"x",35);
+       		 	mytext.setAttributeNS(null,"y",253);
+       		 	mytext.setAttributeNS(null,"font-size","10px");       		 	
+            	mytext.innerHTML = "0";
+            	document.getElementById("RefChromosomes").appendChild(mytext);         	
+
+ 
+		//Set the parameters for the first chromosome
+
+		//Draw the Chromosomes works, just no click or hover
+         	for (var i = 0; i < Length; i++) {
+          		var myChrome = document.createElementNS(svgNS,"rect");  
+//           		myChrome.setAttributeNS(null,"class",tempx);
+
+	       		var ID=Chromosomes[i];
+          	    myChrome.setAttributeNS(null,"id",Chromosomes[i]);
+            	myChrome.setAttributeNS(null,"x",tempx);
+            	
+            	//set up X position for the next one
+            	var tempx=tempx+tempwidth*space;            	          		
+            	//Calculate the Y Top position (0 for maximum length, 250 for minimum)
+            	// First get the length and divide it by max *250.
+            	var CHRLENGTH=Positions[i]/Largest*250;
+    		 	if(CHRLENGTH<10){CHRLENGTH=10;}
+
+				// set it for length
+				var endpos=250-CHRLENGTH;
+       		 	myChrome.setAttributeNS(null,"y",endpos);
+       		 	myChrome.setAttributeNS(null,"height",CHRLENGTH);
+       		 	// set curviture
+            	myChrome.setAttributeNS(null,"rx",15);
+            	myChrome.setAttributeNS(null,"ry",15);
+            	// set width (standard)
+            	myChrome.setAttributeNS(null,"width",tempwidth);
+            	// Set height
+            	myChrome.setAttributeNS(null,"fill","#D3D3D3");
+            	myChrome.setAttributeNS(null,"stroke","black");
+            	myChrome.setAttributeNS(null,"stroke-width",2);
+            	myChrome.onclick = function(){
+            		var a = document.getElementById(this.id);
+            		// See if it is blue. If so change it to red	
+            		if (a.getAttribute("fill") == "#D3D3D3") {
+						a.setAttributeNS(null,"fill","red");
+							// update div id="SELECTED_CHROMOSOMES"
+
+						// Add information to ARRAY
+						SELECTED.push(a.id);
+
+
+            		}else{
+            			a.setAttributeNS(null,"fill","#D3D3D3");
+						var index = SELECTED.indexOf(a.id);
+ 						 SELECTED.splice(index, 1);            	
+            		}
+            		
+            		// LATER UPDATE SECTION. INCLUDE DOWNLOAD LINKS FROM NCBI AND ALL DETAILS WE HAVE AVAILABLE!!!!
+            			
+					OUTPUT_DATA()
+            		
+            		
+            	}
+
+            	document.getElementById("RefChromosomes").appendChild(myChrome);
+            	// Add text Labels
+            	
+        		var chrtext = document.createElementNS(svgNS,"text"); 
+            	chrtext.setAttributeNS(null,"x",tempx-tempwidth*.7);
+            	chrtext.setAttributeNS(null,"style","writing-mode: tb; glyph-orientation-vertical: 180;");
+
+       		 	chrtext.setAttributeNS(null,"y",252);
+       		 	chrtext.setAttributeNS(null,"font-size","16px"); 
+       		 	chrtext.setAttributeNS(null,"class","textlabel");
+            	chrtext.innerHTML = Chromosomes[i];
+            	document.getElementById("RefChromosomes").appendChild(chrtext);  
+
+            }
+//             Get longest chromosome name;
+			var longestname=Math.max(...(Chromosomes.map(el => el.length)));
+		console.table(Chromosomes);  
+		newheight=280+longestname*8;
+		document.getElementById("RefChromosomes").setAttributeNS(null,"height",newheight);
+
+        }                 
+
+function Create_Button(){
+	while (document.getElementById("OPEN_WINDOW").lastChild) {
+   		document.getElementById("OPEN_WINDOW").removeChild(document.getElementById("OPEN_WINDOW").lastChild);
+	}
+	var btn = document.createElement("BUTTON");
+	btn.innerHTML = "VISUALIZE BLOCKS";
+	btn.onclick = function(){
+ 		if (SELECTED && SELECTED.length && Selected_Que_taxa && Selected_Que_taxa.length){
+ 			var printotwindow =	window.open("http://localhost/BLOCK_VIEW.html");
+ 			printotwindow.onload = function() {
+//  			  Add Chromosomess
+ 				var tempchrome;
+ 				var tempblocks=[];
+ 				var tempqueryselected=[];
+ 				for (const taxa of Selected_Que_taxa){
+ 			 		tempqueryselected.push(taxa.substr(1))
+				}
+				Blocks_DB.forEach(function (arrayItem) {
+					if(arrayItem.Taxid==Selected_Ref_taxa.substr(1)){
+   						tempchrome=arrayItem.Chromosomes;
+//    						Blocks
+						arrayItem.Alignments.forEach(function(newarrayitem){
+							console.log(newarrayitem.Qid);
+							if(tempqueryselected.includes(newarrayitem.Qid)){
+								newarrayitem.Blocks.forEach(function(blk){
+								if (SELECTED.includes(blk.RefChr)){
+									blk.Qid=newarrayitem.Qid;
+			 						tempblocks.push(blk);
+			 					}
+// 									tempblocks.concat(newarrayitem.Blocks);
+								});
+
+							}
+						});
+					}
+   						
+				});
+				tempchrome.forEach(function (arrayItem) {
+					if (SELECTED.includes(arrayItem.ChrID)){
+						printotwindow.Chromosomes.push(arrayItem);}
+   				 });
+//    				 BLOCKS
+				printotwindow.Blocks=tempblocks;
+			 
+   				 
+//  			  Add refrence
+				printotwindow.Genome_Name=Selected_Ref_taxa.substr(1);
+				// Add Query
+ 			 	 printotwindow.Que_Genome=Selected_Que_taxa;
+ 			  
+				printotwindow.make_SVG();
+   			}
+// 			
+		}else{
+			alert("Please select both chromosomes and a query");
+// 		
+ 		} 
+	}
+	btn.setAttributeNS(null,"class","VISUALIZE");
+
+    document.getElementById("OPEN_WINDOW").appendChild(btn);
+
+};
+
+
+
+
+		</script>
+		
+		
+		
+		
+   </body>
+</html>
