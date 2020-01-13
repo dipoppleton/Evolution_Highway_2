@@ -1,242 +1,595 @@
 <!DOCTYPE html>
 <html style="width:100%;height:100%;">
-	<head>
-		<meta charset="utf-8" />
-		<title>"BLOCK VIEW"</title>
-        <script src="libraries/FileSaver.js" type="text/javascript"></script>
-	    <script src="libraries/spectrum.js"></script>
-	    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-		<script src="Species_Details.json"></script>
-		<script src="Blocks.json"></script>
-    	<link rel="stylesheet" type="text/css" href="libraries/spectrum.css">
-    <style>
-/* 		Colors: Black #272727 grey #747474 orage #FF652F yellow #FFE400 green #14a76C */
-		
-	/* Header details */
-	
-			.header {overflow: hidden;background-color: #404040;padding: 20px 10px; }
-			.header a {float: left;text-align: center;padding: 12px;text-decoration: none;font-size: 18px; line-height: 25px;border-radius: 4px;color: #e6e6e6;}
-			.header-right {float: right;}
-			.header-center {font-size: 22px;text-align: center; line-height: 25px;border-radius: 4px;color: #e6e6e6;}
+<head>
+<meta charset="utf-8" />
+<title>"BLOCK VIEW"</title>
+<script src="libraries/FileSaver.js" type="text/javascript"></script>
+<script src="libraries/spectrum.js"></script>
+<script src="libraries/jquery-3.4.1.js"></script>
+//<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="Species_Details.json"></script>
+<script src="Blocks.json"></script>
+<link rel="stylesheet" type="text/css" href="libraries/spectrum.css">
+<link rel="shortcut icon" href="favicon/favicon.ico">
+<style>
+/* This section contains everything that is known good.
+	/* Header details GOOD. DON'T FUCK WITH IT*/
+.header {overflow: hidden;background-color: #555753;height:7vh}
+.header a {float: left;text-align: center;padding:1vh;text-decoration: none;font-size: 3vh; color: #73d216;}
+.header-right {float: right;}
+.header a.logo {font-size: 4vh;font-weight: bold;color:#73d216;padding:0vh,1vh }	
 
-			.header a.logo {font-size: 25px;font-weight: bold;color: #99bbff;}	
+/*Aspects of the bottom opitons pane*/
+.button {background-color: blue; height=1.8vh; width=5vh;color: white;padding:0.3vh 1vh 0.3vh 1vh;text-align: center;text-decoration: none;display: inline-block;font-size:1.6vh ;cursor: pointer;outline:0;}
+.bottomtext {font-size:2vh;padding:1.3vh 1vh 1.6vh 1vh;font-weight: bold;color:#73d216;}
+
+/* The switch - the box around the slider */
+.switch {position: relative;display: inline-block; width: 4vh; height: 2vh;}
+/* Hide default HTML checkbox */
+.switch input {opacity: 0;width: 0;height: 0;}
+/* The slider */
+.slider2 { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #d922d2; -webkit-transition: .4s; transition: .4s;}
+.slider2:before { position: absolute; content: ""; height: 1.6vh; width: 1.6vh; left: 0.1vh; bottom: 0.2vh; background-color:white; -webkit-transition: .4s; transition: .4s;}
+input:checked + .slider2 { background-color: #2196F3;}
+input:focus + .slider2 { box-shadow: 0 0 1px #2196F3;}
+input:checked + .slider2:before { -webkit-transform: translateX(2.0vh); -ms-transform: translateX(2.0vh); transform: translateX(2.0vh);}
+/* Rounded sliders */
+.slider2.round { border-radius: 1vh;}
+.slider2.round:before { border-radius: 50%;}
+
+.slider {-webkit-appearance: none;  /* Override default CSS styles */ appearance: none; width: 15vh; /* Full-width */ height: 2vh; /* Specified height */ background: #d3d3d3; /* Grey background */ outline: none; /* Remove outline */ opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */ -webkit-transition: .2s; /* 0.2 seconds transition on hover */transition: opacity .2s;}
+/* Mouse-over effects */
+.slider:hover { opacity: 1; /* Fully shown on mouse-over */}
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+.slider::-webkit-slider-thumb {-webkit-appearance: none; /* Override default look */appearance: none; width: 2vh; /* Set a specific slider handle width */ height: 2vh; /* Slider handle height */ background: #4CAF50; /* Green background */ cursor: pointer; /* Cursor on hover */}
+.slider::-moz-range-thumb {width: 2vh; /* Set a specific slider handle width */height: 2vh; /* Slider handle height */background: #4CAF50; /* Green background */cursor: pointer; /* Cursor on hover */}
+.output_data{padding: 2vh 2vh;background-color: white;overflow: scroll;}
+
+
 /* Details for the box */
-.Block_container {position: relative; width: 100%; height: 800px;overflow: scroll; }
-.Data_container{padding: 30px 30px;position: relative; width: 90%; height: 200px;overflow: scroll;}
-.output_data{padding: 30px 30px;height:80px;background-color: white;overflow: scroll;}
-.container-l {
-  float: left;
-  width: 46%;
-  height: 350px;
-  background-color: rgb(230, 230, 233);
-  padding: 20px 10px;
-  box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1), 0 4px 4px 0 rgba(0, 0, 0, 0.15);
-}
-.container-r {
-  float: right;
-  width: 46%;
-  height: 350px;
-  background-color: rgb(230, 230, 233);
-  padding: 20px 10px;
-  box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1), 0 4px 4px 0 rgba(0, 0, 0, 0.15);
-}
+.Block_container {position: relative; width: 100%; height: 70vh;overflow: scroll; }
+.Data_container{padding: 2vh 2vh;position: relative; width: 90%; height: 20vh;overflow: scroll;}
+.container-l {float: left; width: 46%; height: 350px; background-color: rgb(230, 230, 233);padding: 20px 10px; box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1), 0 4px 4px 0 rgba(0, 0, 0, 0.15); }
+.container-r {float: right;width: 46%; height: 350px;background-color: rgb(230, 230, 233); padding: 20px 10px; box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1), 0 4px 4px 0 rgba(0, 0, 0, 0.15);}
+.selecthead { text-align: center; font-size: 20px; font-weight: 600; font-family: 'Open Sans', sans-serif; color: rgb(116, 124, 142);padding: 10px 0px 0px 40px;}
+.box {height: 300px; padding: 20px 10px; color: rgb(116, 124, 142); font-size: 15px; overflow: auto;}
+.chrcontain { position: relative;width: 100%;height: 340px;overflow-y: scroll;}
 
-.selecthead {
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
-  font-family: 'Open Sans', sans-serif;
-  color: rgb(116, 124, 142);
-  padding: 10px 0px 0px 40px;
-}
+.rangeslider{width: 50%;}
 
-.box {
-height: 300px;
-  padding: 20px 10px;
-  color: rgb(116, 124, 142);
-  font-size: 15px;
-  overflow: auto;
-}
 
-.chrcontain {
-  position: relative;
-  width: 100%;
-  height: 340px;
-  overflow-y: scroll;
-}
-
-.que-button-not-selected {background-color: #000000;width:100%;border: none; height=10px;color: white;padding: 10px 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;outline:0;}
-.que-button-selected {background-color: #800000;width:100%;border: none; height=10px;color: white;padding: 10px 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;outline:0;}
-
-.ref-button-not-selected {background-color: #000000;width:100%;border: none; height=10px;color: white;padding: 10px 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;outline:0;}
-.ref-button-selected {background-color: #4CAF50;width:100%;border: none; height=10px;color: white;padding: 10px 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;outline:0;}
-.button-hover {background-color: white;width:100%;border: none; height=10px;color: black;padding: 10px 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;outline:0;}
-.rangeslider{
-    width: 50%;
-    }
-
-/* Mobile and narrow window */
-			@media screen and (max-width: 500px) {
-				.header a {float: none;display: block;text-align: left;}
-				.header-right {float: none;}
-				.reftreedet{float: none;border:0px solid #FFE400;}
-				.comtreedet{float: none;border:0px solid #FFE400;}
-			}	
-		</style>
-		</head>
-	<body style="width:100%;height:100%;margin:0;background-color: #404040;">
-   
-<!--    This section presents all of the header details. Woop Woop. -->
-		<div class="header" id = "Title">
- 		 <a href="#default" class="logo">Evolution Highway</a>
- 		 <div class="header-center" id="TITLE">
- 		 
- 		 </div>
- 			 <div class="header-right">
-   			 <a class="active" href="#home">Help</a>
-  			  <a href="https://www.rvc.ac.uk/about/our-people/denis-larkin#tab-research">About Our Lab</a>
-  			</div>
-     	</div>
-     	
-
-<div id="Blocks_Box" class="Block_container" style="background-color: #FFFFFF;">
-	<svg id="BLOCKS_VIEW" width=1500 height=1000 xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" >
-	</svg>
+</style>
+</head>
+<body style="width:100%;height:100%;margin:0;background-color: #555753;">
+<!--    This section presents all of the header details.FULLY FUNCTIONAL-->
+<div class="header" id = "Title">
+	<a href="#default" class="logo">Evolution Highway</a>
+	<div class="header-right">
+		<a href="#home">Help</a>  
+		<a href="https://www.rvc.ac.uk/about/our-people/denis-larkin#tab-research">About Our Lab</a>	  
+	</div>
 </div>
-
-<button onclick="save_svg()" class="button1">
-	Save Graphic as SVG
+<svg id="BLOCKS_VIEW" style="background-color: #ffffff;"width=100% height=80vh ViewBox="200 0 500 500" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" ></svg>
+<button onclick="save_svg()" class="button">
+Save SVG
 </button>
-<button onclick="save_csv()" class="button1">
-	Save selected data as CSV
+<button onclick="save_csv()" class="button">
+Save CSV
 </button>
 
-<div class="slidecontainer">
-	Chromosome Width
-  <input type="range" min="25" max="200" value="50" class="slider" id="widthslider">
+<text class=bottomtext id=Justforspace></text>
+      
+<text class=bottomtext>MOVEMENT</text>
+<label class="switch">
+  <input type="checkbox" id=mv_tgle>
+  <span class="slider2 round"></span>
+</label>
+<text class=bottomtext>SELECTION</text>
 
-	Chromosome Length
-  <input type="range" min="200" max="10000" value="1000" class="slider" id="lengthslider">
-</div>
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext id=slct_text></text>
+<label class="switch" id=slct_togglebox>
+</label>
+<text id=deslct_text class=bottomtext></text>
+
+<text class=bottomtext id=Justforspace></text>
+<text class=bottomtext>CHROMOSOME WIDTH</text>
+<input type="range" min="25" max="200" value="50" class="slider" id="widthslider">
+<text class=bottomtext id=Justforspace></text>
+<text class=bottomtext>CHROMOSOME LENGTH</text>
+ <input type="range" min="50" max="10000" value="1000" class="slider" id="lengthslider">
+<text class=bottomtext id=Justforspace></text>
 <br>
-<div>
-Chromosome Color   <input type='color' id="Chr_Color" value="#ffffcc" />Forward Color  <input type='color' id="Fwd_Color" value="#000099" />Reverse Color  <input type='color' id="Rvs_Color" value="#cc0000" />Reverse Highlight  <input type='color' id="Rvs_Hlt" value="#ff9933" />Forward Highlight  <input type='color' id="Fwd_Hlt" value="#33cc33" />Label Text  <input type='color' id="Lbl_clr" value="#FFFFFF" />Label Size  <input type='text' id="Lbl_sze" value="Responsive" />Label Shadow  <input type='checkbox' id="Lbl_sdw" checked="checked" />Chromosome Selection  <input type='checkbox' id="Chr_Sel" checked="checked" />Scale  <input type='checkbox' id="Scl" checked="checked" />
-</div>
+<text class=bottomtext>BASE COLOUR</text>
+<input type='color' id="Chr_Color" value="#ffffcc" /> 
+<text class=bottomtext id=Justforspace></text>
 
+<text class=bottomtext>SHOW BREAKPOINTS?</text>
+<input type='checkbox' id="Shw_Brks" checked="checked" />
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext>BREAKPOINT COLOUR</text>
+<input type='color' id="Brk_Color" value="#ffffff" />
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext>SELECTED BREAKPOINT COLOUR</text>
+<input type='color' id="Sel_Brk_Color" value="#000000" />
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext>FORWARD COLOUR</text>
+<input type='color' id="Fwd_Color" value="#add8e6" />
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext>FORWARD SELECTED</text>
+<input type='color' id="Fwd_Hlt" value="#000099" />
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext>REVERSE COLOUR</text>
+<input type='color' id="Rvs_Color" value="#ffb6c1" />
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext>REVERSE SELECTED</text>
+<input type='color' id="Rvs_Hlt" value="#cc0000" />
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext>LABEL TEXT</text>
+<input type='color' id="Lbl_clr" value="#FFFFFF" />
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext>LABEL SIZE</text>
+<input type='text' id="Lbl_sze" value="Responsive" />
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext>LABEL SHADOW</text>
+<input type='checkbox' id="Lbl_sdw" checked="checked" />
+<text class=bottomtext id=Justforspace></text>
+
+<text class=bottomtext>GRIDLINES</text>
+<input type='checkbox' id="Scl" checked="checked" />
+<br>
+<text class=bottomtext id=Justforspace></text>
 </div class="Data_container">   
     <div id="SELECTED_BLOCKS" class="output_data">
 </div>
 
-
-
-
-
 <script>
-var svgNS = "http://www.w3.org/2000/svg";  
 
-// Input variables
-var Chromosomes=[];
-var Genome_Name="";
-var Blocks=[];
-var Que_Genomes=[];
-var Block_Array=[];
-var SELECT_ALL_THING=[];
-// Chosen cooridinates
+var svgNS = "http://www.w3.org/2000/svg";  
+var FIRST= true;
+var RAW_CHR=[];
+var RAW_BLOCKS=[];
 var Selected=[];
-// csv output
-var CSV_output;
+
+// Chosen cooridinates
 
 // Modifiable Paramaters
 // Set the width of the chromosomes
 var SET_WIDTH=50;// Default width of chromsome
+var SET_SPACE=25;
+var viewboxoriginal={x:200,y:0,width:500,height:500};
+
 var rangeslider = document.getElementById("widthslider");
 rangeslider.oninput = function() {
 	SET_WIDTH=this.value;
+	SET_SPACE=SET_WIDTH/2;
 	make_SVG();
-
 }
+
 var SET_Length=1000;// Default length of chromsome
 var rangeslider = document.getElementById("lengthslider");
 rangeslider.oninput = function() {
 	SET_Length=this.value;
 	make_SVG();
 }
-// Set the color of the chromosomes
 
-var CHR_COLOR="#ffffcc";
+var MOVEMENT=true;
+var movementtoggle = document.getElementById("mv_tgle");
+movementtoggle.onclick = function() {
+	togglemove();
+}
+function togglemove(){
+	MOVEMENT=!MOVEMENT;
+	if (MOVEMENT==true){
+		movementtoggle.checked=false;	
+		document.getElementById("slct_text").innerHTML="";
+		document.getElementById("slct_togglebox").innerHTML="";
+		document.getElementById("deslct_text").innerHTML="";
+	}else{
+		movementtoggle.checked=true;	
+		document.getElementById("slct_text").innerHTML="SELECT";
+		document.getElementById("slct_togglebox").innerHTML='<input type="checkbox" id=slc_tgle onclick="toggleselect()"><span class="slider2 round"></span>';
+		document.getElementById("deslct_text").innerHTML="DESELECT";
+		if (SELECT==true){
+			document.getElementById("slc_tgle").checked=false;
+		}else{
+			document.getElementById("slc_tgle").checked=true;
+		}
+	}
+}
+SELECT=true;
+function toggleselect(){
+	var box=document.getElementById("slc_tgle");
+	SELECT=!box.checked;
+	console.log(SELECT);
+}
+
+
+var CHR_COLOR="#ffffcc";// Set the color of the chromosomes
 var color = document.getElementById("Chr_Color");
 color.oninput = function() {
 	CHR_COLOR=this.value;
 	make_SVG();
 }
-var FORWARD_COLOR="#000099";
+var SHOW_BREAKS=true;
+var Show_Breaks = document.getElementById("Shw_Brks");
+	Show_Breaks.onclick = function() {
+	SHOW_BREAKS=Show_Breaks.checked;
+		make_SVG();
+}
+var BRK_COLOR="#ffffff";// Set the color of the chromosomes
+var color = document.getElementById("Brk_Color");
+color.oninput = function() {
+	BRK_COLOR=this.value;
+	make_SVG();
+}
+var SEL_BRK_COLOR="#000000";// Set the color of the chromosomes
+var color = document.getElementById("Sel_Brk_Color");
+color.oninput = function() {
+	SEL_BRK_COLOR=this.value;
+	make_SVG();
+}
+
+var FORWARD_COLOR="#add8e6";// of correct orientation blocks
 var color = document.getElementById("Fwd_Color");
 color.oninput = function() {
 	FORWARD_COLOR=this.value;
 	make_SVG();
 }
-var REVERSE_COLOR="#cc0000";
+
+var REVERSE_COLOR="#ffb6c1";//Colour of reverse orientation blocks
 var color = document.getElementById("Rvs_Color");
 color.oninput = function() {
 	REVERSE_COLOR=this.value;
 	make_SVG();
 }
-var FORWARD_HIGHLIGHT="#33cc33";
+
+var FORWARD_HIGHLIGHT="#000099"; //Colour of highlighted correct orientation blocks
 var color = document.getElementById("Fwd_Hlt");
 color.oninput = function() {
 	FORWARD_HIGHLIGHT=this.value;
 	make_SVG();
 }
-var REVERSE_HIGHLIGHT="#ff9933";
+
+var REVERSE_HIGHLIGHT="#cc0000";// Colour of reversed highlighted regions
 var color = document.getElementById("Rvs_Hlt");
 color.oninput = function() {
 	REVERSE_HIGHLIGHT=this.value;
 	make_SVG();
 }
+
 var LABEL_COLOR="#FFFFFF";
 var color = document.getElementById("Lbl_clr");
 color.onchange = function() {
 	LABEL_COLOR=this.value;
 	make_SVG();
 }
+
 var LABEL_FONT_SIZE="Responsive";
 var fontsizer = document.getElementById("Lbl_sze");
 fontsizer.onkeyup = function() {
 	LABEL_FONT_SIZE=fontsizer.value;
-	console.log(LABEL_FONT_SIZE);
 	make_SVG();
 }
+
 var LABEL_SHADOW=true;
 var shadowlabel = document.getElementById("Lbl_sdw");
 	shadowlabel.onclick = function() {
-	console.log("fuck ya");
 	LABEL_SHADOW=shadowlabel.checked;
 		make_SVG();
 }
-// <input type='checkbox' id="Chr_Sel" checked="checked" />
-var SELECT_ALL_BUTTON=true;
-var Label = document.getElementById("Chr_Sel");
-	Label.onclick = function() {
-	SELECT_ALL_BUTTON=Label.checked;
-		make_SVG();
-}
 
-Scl
-// <input type='checkbox' id="Chr_Sel" checked="checked" />
 var SCALE_BUTTON=true;
 var SCL = document.getElementById("Scl");
 	SCL.onclick = function() {
 	SCALE_BUTTON=SCL.checked;
 		make_SVG();
 }
+//for alternation between movement and drag Selection
+//Added movement to the picture.
+document.addEventListener("keydown",clickA);
+function clickA(e){
+	var key = e.which || e.keyCode;
+	if (key === 83) {
+		togglemove();
+	}else if (key === 39) { //move right by one screen
+		e.preventDefault();
+		if (isPointerDown == false && MOVEMENT == true){
+			if ((viewBox.x + viewBox.width) >= WIDTH){
+				viewBox.x=WIDTH-viewBox.width;
+			}else{
+				viewBox.x=viewBox.x+viewBox.width
+			}
+			var viewstring=`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
+			document.getElementById("BLOCKS_VIEW").setAttribute('viewBox',viewstring);
+		}
+	}else if (key === 37) { //move left by one screen
+		e.preventDefault();
+		if (isPointerDown == false && MOVEMENT == true){
+			if ((viewBox.x - viewBox.width) <= 200){
+				viewBox.x=200;
+			}else{
+				viewBox.x=viewBox.x-viewBox.width
+			}
+			var viewstring=`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
+			document.getElementById("BLOCKS_VIEW").setAttribute('viewBox',viewstring);
+			
+		}
+	}else if (key === 38) { //move up by one screen
+		e.preventDefault();
+		if (isPointerDown == false && MOVEMENT == true){
+			if ((viewBox.y - viewBox.height) <= 0){
+				viewBox.y=0;
+			}else{
+				viewBox.y=viewBox.y-viewBox.height;
+			}
+			var viewstring=`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
+			document.getElementById("BLOCKS_VIEW").setAttribute('viewBox',viewstring);
+		}
+	}else if (key === 40) { //move down by one screen
+		e.preventDefault();
+		if (isPointerDown == false && MOVEMENT == true){
+			if ((viewBox.y + viewBox.height) > SET_Length){
+				viewBox.y=SET_Length;
+			}else{
+				viewBox.y=viewBox.y+viewBox.height;
+			}
+			var viewstring=`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
+			document.getElementById("BLOCKS_VIEW").setAttribute('viewBox',viewstring);
+			
+		}
+	}
+}
 
-// Label Shadow  <input type='checkbox' id="Lbl_sdw" checked="checked" />
+//THIS SECTION COVERS THE CLICK NAVIGATION
+var MAIN_BLOCK=document.getElementById("BLOCKS_VIEW");
+if(window.PointerEvent){
+	MAIN_BLOCK.addEventListener('pointerdown', onPointerDown); // Pointer is pressed
+	MAIN_BLOCK.addEventListener('pointerup', onPointerUp); // Releasing the pointer
+	MAIN_BLOCK.addEventListener('pointerleave', onPointerUp); // Pointer gets out of the SVG area
+	MAIN_BLOCK.addEventListener('pointermove', onPointerMove); // Pointer is moving
+}else{
+  // Add all mouse events listeners fallback
+	MAIN_BLOCK.addEventListener('mousedown', onPointerDown); // Pressing the mouse
+	MAIN_BLOCK.addEventListener('mouseup', onPointerUp); // Releasing the mouse
+	MAIN_BLOCK.addEventListener('mouseleave', onPointerUp); // Mouse gets out of the SVG area
+	MAIN_BLOCK.addEventListener('mousemove', onPointerMove); // Mouse is moving
+  // Add all touch events listeners fallback
+	MAIN_BLOCK.addEventListener('touchstart', onPointerDown); // Finger is touching the screen
+	MAIN_BLOCK.addEventListener('touchend', onPointerUp); // Finger is no longer touching the scree	n
+	MAIN_BLOCK.addEventListener('touchmove', onPointerMove); // Finger is moving
+}
 
-//For saving to file
-function save_svg(){
-	var svg_data = document.getElementById("BLOCKS_VIEW").innerHTML //put id of your svg element here
-	var head = '<svg title="graph" version="1.1" xmlns="http://www.w3.org/2000/svg">'
-	//if you have some additional styling like graph edges put them inside <style> tag
+// THESE VARIABLES DESCRIBE THE GREY BOX
+var selectboxstart={};
+var selectboxend={};
+selectboxstart.x=0;
+selectboxstart.y=0;
+selectboxend.x=0;
+selectboxend.y=0;
+
+
+// This function returns an object with X & Y values from the pointer event
+function getPointFromEvent (event) {
+	var point = {x:0, y:0};
+	if (event.targetTouches) {
+		point.x = event.targetTouches[0].clientX;
+		point.y = event.targetTouches[0].clientY;
+	}else{
+		point.x = event.clientX;
+		point.y = event.clientY;
+	}
+	return point;
+}
+var isPointerDown = false;
+var pointerOrigin = {x:0,y:0};
+function onPointerDown(event) {
+	var mytempblock=this;
+	isPointerDown = true; // We set the pointer as down
+	var pointerPosition = getPointFromEvent(event);
+	pointerOrigin.x = pointerPosition.x;
+	pointerOrigin.y = pointerPosition.y;
+
+	//getting the inital values for drawing a grey box
+	if(MOVEMENT==false){
+		var svgP = svgPoint(mytempblock, pointerPosition.x, pointerPosition.y);
+		selectboxstart.x=svgP.x;
+		selectboxstart.y=svgP.y;
+	}
+
+}
+var newViewBox={x:200,y:0};
+var viewBox = viewboxoriginal;
+function onPointerMove (event) {
+	event.preventDefault();
+	if (!isPointerDown){
+		return;
+	}
+	if (MOVEMENT==true){
+		var pointerPosition = getPointFromEvent(event);
+		newViewBox.x=viewBox.x-((pointerPosition.x - pointerOrigin.x)*ratio);
+		if (newViewBox.x <200){
+			newViewBox.x=200;
+		}else if (newViewBox.x >= WIDTH){
+			newViewBox.x=WIDTH;
+		}
+	newViewBox.y=viewBox.y-((pointerPosition.y - pointerOrigin.y)*ratio);
+		if (newViewBox.y <= 0){
+			newViewBox.y=0;
+		}else if (newViewBox.y > SET_Length){
+			newViewBox.y=SET_Length;
+		}
+
+		var viewstring=`${newViewBox.x} ${newViewBox.y} ${viewBox.width} ${viewBox.height}`;
+		document.getElementById("BLOCKS_VIEW").setAttribute('viewBox',viewstring);
+	}else{
+// Drawing the grey box
+		var pointerPosition = getPointFromEvent(event);
+		var mytempblock=document.getElementById("BLOCKS_VIEW");
+		var x = pointerPosition.x;
+		var y = pointerPosition.y;
+		//GET NEW POINTS
+		var svgP = svgPoint(mytempblock, x, y);
+		selectboxend.x=svgP.x;
+		selectboxend.y=svgP.y;
+		//DRAW IT
+		var supertester = document.getElementById("drawbox");
+		if (!supertester){
+			var selectbox = document.createElementNS(svgNS,"rect");  
+			selectbox.setAttributeNS(null,"id","drawbox");
+			if (selectboxend.x-selectboxstart.x>=0){
+				selectbox.setAttributeNS(null,"x",selectboxstart.x);
+				selectbox.setAttributeNS(null,"width",selectboxend.x-selectboxstart.x);
+			}else{
+				selectbox.setAttributeNS(null,"x",selectboxend.x);
+				selectbox.setAttributeNS(null,"width",selectboxstart.x-selectboxend.x);
+
+			}
+			selectbox.setAttributeNS(null,"stroke","black");
+			selectbox.setAttributeNS(null,"stroke-width",2);
+			selectbox.setAttributeNS(null,"fill","black");
+			selectbox.setAttributeNS(null,"fill-opacity","0.1");
+			if (selectboxend.y-selectboxstart.y>0){
+				selectbox.setAttributeNS(null,"y",selectboxstart.y);
+				selectbox.setAttributeNS(null,"height",selectboxend.y-selectboxstart.y);
+			}else{
+				selectbox.setAttributeNS(null,"y",selectboxend.y);
+				selectbox.setAttributeNS(null,"height",selectboxstart.y-selectboxend.y);
+			}
+			document.getElementById("BLOCKS_VIEW").appendChild(selectbox);
+		}else{
+			var b = document.getElementById("drawbox");
+			b.remove();
+			var selectbox = document.createElementNS(svgNS,"rect");  
+			selectbox.setAttributeNS(null,"id","drawbox");
+			if (selectboxend.x-selectboxstart.x>=0){
+				selectbox.setAttributeNS(null,"x",selectboxstart.x);
+				selectbox.setAttributeNS(null,"width",selectboxend.x-selectboxstart.x);
+			}else{
+				selectbox.setAttributeNS(null,"x",selectboxend.x);
+				selectbox.setAttributeNS(null,"width",selectboxstart.x-selectboxend.x);
+
+			}
+			selectbox.setAttributeNS(null,"stroke","black");
+			selectbox.setAttributeNS(null,"stroke-width",2);
+			selectbox.setAttributeNS(null,"fill","black");
+			selectbox.setAttributeNS(null,"fill-opacity","0.1");
+			if (selectboxend.y-selectboxstart.y>0){
+				selectbox.setAttributeNS(null,"y",selectboxstart.y);
+				selectbox.setAttributeNS(null,"height",selectboxend.y-selectboxstart.y);
+			}else{
+				selectbox.setAttributeNS(null,"y",selectboxend.y);
+				selectbox.setAttributeNS(null,"height",selectboxstart.y-selectboxend.y);
+			}
+			document.getElementById("BLOCKS_VIEW").appendChild(selectbox);
+
+		}
+	}
+}
+function onPointerUp(){
+	isPointerDown = false;
+	if (MOVEMENT==true){
+	viewBox.x=newViewBox.x;
+	viewBox.y=newViewBox.y;
+	}
+	//for selection of the values inside and removing the box
+	if (document.contains(document.getElementById("drawbox"))) {
+		var mysvgrect=document.getElementById("BLOCKS_VIEW").createSVGRect();
+		var oldbox=document.getElementById("drawbox");	
+// convert svg cooridiantes to real cooridinates
+		var tempdata=SVGToScreen(oldbox.getAttribute("x"),oldbox.getAttribute("y"));
+		mysvgrect.x=tempdata.x;
+		mysvgrect.y=tempdata.y-90;
+		tempdata.x=parseInt(oldbox.getAttribute("x"))+parseInt(oldbox.getAttribute("width"));
+		tempdata.y=parseInt(oldbox.getAttribute("y"))+parseInt(oldbox.getAttribute("height"));
+		console.log(tempdata);
+		var tempdata2=SVGToScreen(tempdata.x,tempdata.y);
+		mysvgrect.width=tempdata2.x-mysvgrect.x;
+		mysvgrect.height=tempdata2.y-mysvgrect.y-80;
+		console.log(mysvgrect.x);
+		console.log(mysvgrect.y);
+		console.log(mysvgrect.width);
+		console.log(mysvgrect.height);
+		var selectedbybox=document.getElementById("BLOCKS_VIEW").getEnclosureList(mysvgrect,null);
+		var selectedbyboxA = [ ...selectedbybox ];
+		var cutbybox=document.getElementById("BLOCKS_VIEW").getIntersectionList(mysvgrect,null);
+		var cutbyboxA = [ ...cutbybox ];
+		var both=cutbyboxA.concat(selectedbyboxA);
+		document.getElementById("drawbox").remove();
+		var templength=both.length;
+		for (var i = 0; i < templength; i++){
+    			var tempid=both[i].id;
+			console.log(tempid);
+			if (!Selected.includes(tempid)){
+				if (SELECT==true){
+					var a = document.getElementById(tempid);
+					var tempstorage=a.id.split('__');
+					Selected.push(tempid);
+					if (tempstorage[8]==" "){	
+						a.setAttributeNS(null,"fill",SEL_BRK_COLOR);
+					}else if (tempstorage[8]=="+1"){
+						a.setAttributeNS(null,"fill",FORWARD_HIGHLIGHT);
+					}else{
+						a.setAttributeNS(null,"fill",REVERSE_HIGHLIGHT);
+
+					}
+
+				}
+
+   	
+			}else{
+				if (SELECT==false){
+					var a = document.getElementById(tempid);
+					var tempstorage=a.id.split('__');
+					var index = Selected.indexOf(a.id);
+					Selected.splice(index, 1);     				
+					if (tempstorage[8]==" "){	
+						a.setAttributeNS(null,"fill",BRK_COLOR);
+					}else if (tempstorage[8]=="+1"){
+						a.setAttributeNS(null,"fill",FORWARD_COLOR);
+					}else{
+						a.setAttributeNS(null,"fill",REVERSE_COLOR);
+
+					}
+
+				}
+
+
+
+
+
+			}
+    		}
+	fill_csv_region();
+	}
+fill_csv_region();
+}
+var ratio= viewBox.height / MAIN_BLOCK.getBoundingClientRect().height;
+window.addEventListener('resize', function() {
+	ratio=viewBox.width / MAIN_BLOCK.getBoundingClientRect().width;
+});
+function SVGToScreen(svgX, svgY) {
+   var p = svg.createSVGPoint()
+    p.x = svgX
+    p.y = svgY
+    return p.matrixTransform(svg.getScreenCTM());
+}
+
+//ADD COLOUR FOR BREAKPOINT REGIONS
+function save_svg(){//For saving to file
+	var svg_data = document.getElementById("BLOCKS_VIEW").innerHTML; 
+	var head = '<svg title="graph" version="1.1" xmlns="http://www.w3.org/2000/svg">';
+/////////////////CHECK THIS LINE??????????
 	var style = '<style>circle {cursor: pointer;stroke-width: 1.5px;}text {font: 10px arial;}path {stroke: DimGrey;stroke-width: 1.5px;}</style>'
 	var full_svg = head +  style + svg_data + "</svg>"
 	var blob = new Blob([full_svg], {type: "image/svg+xml"});  
@@ -244,7 +597,7 @@ function save_svg(){
 };
 
 // for getting actual cooridinates
- var svg = document.getElementById('BLOCKS_VIEW');
+var svg = document.getElementById('BLOCKS_VIEW');
 function svgPoint(element, x, y) {
   var pt = svg.createSVGPoint();
   pt.x = x;
@@ -253,272 +606,300 @@ function svgPoint(element, x, y) {
 }
 
 
-
-
-function make_SVG(){
-
+function make_SVG(){//KEY FUNCTION. DON't YOU DARE CHANGE THE FUCKING NAME
 // CLEAR WINDOW
-	const tempnode=document.getElementById("BLOCKS_VIEW");
-  	while (tempnode.firstChild) {
-    		tempnode.removeChild(tempnode.firstChild);
-  	}	
-
-
+const tempnode=document.getElementById("BLOCKS_VIEW");
+while (tempnode.firstChild) {
+	tempnode.removeChild(tempnode.firstChild);
+}
 
 // Calculate Max Length to fit into viewbox
-	var CONVERSION=1;
-// 	var testbox=document.getElementById("BLOCKS_VIEW").getAttribute("viewBox").split(" ");
-	var longest;
-	for (var i = 0; i < Chromosomes.length; i++) {
-		if (parseInt(Chromosomes[i].ChrLength)>parseInt(CONVERSION)){
-			CONVERSION=Chromosomes[i].ChrLength;
-			longest=Chromosomes[i].ChrLength;
-		}
+var CONVERSION=1;
+var longest;
+var Chr_number=0;
+var temp_ref="";
+var spc_cnt=2;//Start with two spaces for the ends
+for (var i = 0; i < RAW_CHR.length; i++) {
+	if(temp_ref != RAW_CHR[i].ref ){
+		spc_cnt=spc_cnt+2;
+		temp_ref=RAW_CHR[i].ref;
 	}
-
-	CONVERSION=CONVERSION/(parseInt(SET_Length));
-	document.getElementById("BLOCKS_VIEW").setAttributeNS(null,"height",(parseInt(SET_Length))+450);
-
-// 	Calculate the total number of chromsome pairs to draw _ along with the width.
-	WIDTH=((Chromosomes.length*Que_Genome.length)+(Chromosomes.length-1)+2)*SET_WIDTH;
-	document.getElementById("BLOCKS_VIEW").setAttributeNS(null,"width",WIDTH+400);
-
-//  	console.log("Chromosomes" + JSON.stringify(Chromosomes));
-//  	console.log("Genome_Name" + Genome_Name);
-//   	console.log("Blocks" + JSON.stringify(Blocks));
-//    	console.log("Que_Genome" + Que_Genome);
-
-
-
+	spc_cnt++;
+//Get the longest
+	if (parseInt(RAW_CHR[i].ChrLength)>CONVERSION){
+		CONVERSION=parseInt(RAW_CHR[i].ChrLength);
+		longest=CONVERSION;
+	}
+	//Get the number of total comparisons
+	Chr_number=Chr_number+RAW_CHR[i].que.length;
+}
+MARGINS=SET_WIDTH;
+SET_Length=parseInt(SET_Length);
+CONVERSION=CONVERSION/SET_Length;
+//Width consists of 1 SetSpace at either end, 1 setwidth for each comparison, a space between uniqe refchrome, twospaces between different refrences
+WIDTH=spc_cnt*SET_SPACE+(Chr_number-1)*SET_WIDTH;
+//document.getElementById("BLOCKS_VIEW").setAttributeNS(null,"width",WIDTH+300);
+/*
 // #####################
-// ##################### ADD GENOME NAME LOOKUP!!!!
-// #####################
-
+// ##################### ADD GENOME NAME LOOKUP!!!! Were appropriate and delete this
 // Make title
 var titlefound=false;
 var title;
 Species_details.forEach(function (arrayItem) {
-// 						console.log(arrayItem);
 	if (arrayItem.Taxid ==Genome_Name){
 		title=arrayItem.Name + " chromosome comparison"
 		document.getElementById("TITLE").innerHTML=title;
 		 titlefound=true;
-
 		}
-	});					
-	if (titlefound==false){
-		title==Genome_Name + " chromosome comparison";
-		document.getElementById("TITLE").innerHTML=Genome_Name + " chromosome comparison";
-	}
-//  		place it at the bottom
- 		mytext = document.createElementNS(svgNS,"text"); 
-            	mytext.setAttributeNS(null,"x",SET_WIDTH);
-       		 	mytext.setAttributeNS(null,"y",(parseInt(SET_Length, 10)+400));
-       		 	mytext.setAttributeNS(null,"font-size","25px");       		 	
-            	mytext.innerHTML = title;
-            	document.getElementById("BLOCKS_VIEW").appendChild(mytext); 
-
-
-	// ADD LATER: SORT BY SIZE
-
-
+});					
+*/
 // ADD SIZE SCALE
-
-	if (SCALE_BUTTON==true){
+if (SCALE_BUTTON==true){
 // 	Draw mbp labels
 	var mytext = document.createElementNS(svgNS,"text"); 
-		mytext.setAttributeNS(null,"x",(WIDTH-0.6*SET_WIDTH));
-		 mytext.setAttributeNS(null,"y",100);
-		 mytext.setAttributeNS(null,"alignment-baseline","middle");
-		 mytext.setAttributeNS(null,"font-size","14px");    
-		mytext.innerHTML = "MBP";
-		document.getElementById("BLOCKS_VIEW").appendChild(mytext);
+	mytext.setAttributeNS(null,"x",(WIDTH-0.3*MARGINS));
+	mytext.setAttributeNS(null,"y",130);
+	mytext.setAttributeNS(null,"alignment-baseline","middle");
+	mytext.setAttributeNS(null,"font-size","14px");    
+	mytext.innerHTML = "MBP";
+	mytext.setAttributeNS(null,"style","pointer-events: none;");
+	document.getElementById("BLOCKS_VIEW").appendChild(mytext);
 		
-			var mytext = document.createElementNS(svgNS,"text"); 
-		mytext.setAttributeNS(null,"x",(0.6*SET_WIDTH));
-		 mytext.setAttributeNS(null,"y",100);
-		 mytext.setAttributeNS(null,"alignment-baseline","middle");
-		 mytext.setAttributeNS(null,"font-size","14px");    
-		 mytext.setAttributeNS(null,"text-anchor","end");       		 	
+	var mytext = document.createElementNS(svgNS,"text"); 
+	mytext.setAttributeNS(null,"x",(0.6*MARGINS));
+	mytext.setAttributeNS(null,"y",130);
+	mytext.setAttributeNS(null,"alignment-baseline","middle");
+	mytext.setAttributeNS(null,"style","pointer-events: none;");
+	mytext.setAttributeNS(null,"font-size","14px");    
+	mytext.setAttributeNS(null,"text-anchor","end");
+	mytext.innerHTML = "MBP";
+	document.getElementById("BLOCKS_VIEW").appendChild(mytext);  
 
-		mytext.innerHTML = "MBP";
-		document.getElementById("BLOCKS_VIEW").appendChild(mytext);  
-		
-		
-		
-// 	
-// 		DRAW TOP =SOLID black
-
-	myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
-	myline.setAttributeNS(null,"x1",0.8*SET_WIDTH);
-	myline.setAttributeNS(null,"x2",WIDTH-0.8*SET_WIDTH);
-	myline.setAttributeNS(null,"y1",100);
-	myline.setAttributeNS(null,"y2",100);
+//DRAW TOP border line
+	myline = document.createElementNS(svgNS,"line");
+	myline.setAttributeNS(null,"x1",0.8*MARGINS);
+	myline.setAttributeNS(null,"x2",WIDTH-0.5*MARGINS);
+	myline.setAttributeNS(null,"y1",130);
+	myline.setAttributeNS(null,"y2",130);
+	myline.setAttributeNS(null,"stroke","black");
+	myline.setAttributeNS(null,"style","pointer-events: none;");
+	myline.setAttributeNS(null,"stroke-width",1);
+	document.getElementById("BLOCKS_VIEW").appendChild(myline);	
+// Draw bottom border line
+	myline = document.createElementNS(svgNS,"line"); 
+	myline.setAttributeNS(null,"x1",0.8*MARGINS);
+	myline.setAttributeNS(null,"x2",WIDTH-0.5*MARGINS);
+	myline.setAttributeNS(null,"y1",SET_Length+130);
+	myline.setAttributeNS(null,"y2",SET_Length+130);
+	myline.setAttributeNS(null,"style","pointer-events: none;");
 	myline.setAttributeNS(null,"stroke","black");
 	myline.setAttributeNS(null,"stroke-width",1);
 	document.getElementById("BLOCKS_VIEW").appendChild(myline);	
-// Draw bottom
-	myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
-	myline.setAttributeNS(null,"x1",0.8*SET_WIDTH);
-	myline.setAttributeNS(null,"x2",WIDTH-0.8*SET_WIDTH);
-	myline.setAttributeNS(null,"y1",(parseInt(SET_Length, 10)+350));
-	myline.setAttributeNS(null,"y2",(parseInt(SET_Length, 10)+350));
-	myline.setAttributeNS(null,"stroke","black");
-	myline.setAttributeNS(null,"stroke-width",1);
-	document.getElementById("BLOCKS_VIEW").appendChild(myline);	
-
-
 // Draw Axis left
-	myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
-	myline.setAttributeNS(null,"x1",0.8*SET_WIDTH);
-	myline.setAttributeNS(null,"x2",0.8*SET_WIDTH);
-	myline.setAttributeNS(null,"y1",100);
-	myline.setAttributeNS(null,"y2",(parseInt(SET_Length, 10)+350));
+	myline = document.createElementNS(svgNS,"line"); 
+	myline.setAttributeNS(null,"x1",MARGINS);
+	myline.setAttributeNS(null,"x2",MARGINS);
+	myline.setAttributeNS(null,"y1",130);
+	myline.setAttributeNS(null,"y2",(SET_Length+130));
+	myline.setAttributeNS(null,"style","pointer-events: none;");
 	myline.setAttributeNS(null,"stroke","black");
 	myline.setAttributeNS(null,"stroke-width",1);
 	document.getElementById("BLOCKS_VIEW").appendChild(myline);	
-
-
 // Draw Axis Right
-	myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
-	myline.setAttributeNS(null,"x1",WIDTH-0.8*SET_WIDTH);
-	myline.setAttributeNS(null,"x2",WIDTH-0.8*SET_WIDTH);
-	myline.setAttributeNS(null,"y1",100);
-	myline.setAttributeNS(null,"y2",(parseInt(SET_Length, 10)+350));
+	myline = document.createElementNS(svgNS,"line"); 
+	myline.setAttributeNS(null,"x1",WIDTH-0.5*MARGINS);
+	myline.setAttributeNS(null,"x2",WIDTH-0.5*MARGINS);
+	myline.setAttributeNS(null,"y1",130);
+	myline.setAttributeNS(null,"y2",(SET_Length+130));
+	myline.setAttributeNS(null,"style","pointer-events: none;");
 	myline.setAttributeNS(null,"stroke","black");
 	myline.setAttributeNS(null,"stroke-width",1);
 	document.getElementById("BLOCKS_VIEW").appendChild(myline);	
 	// 		DRAW end of each Chromsome =SOLID GREY
-	for (var i = 0; i < Chromosomes.length; i++) {
-		myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
-		myline.setAttributeNS(null,"x1",0.8*SET_WIDTH);
-		myline.setAttributeNS(null,"x2",WIDTH-0.8*SET_WIDTH);
-		myline.setAttributeNS(null,"y1",(Chromosomes[i].ChrLength/CONVERSION+100));
-		myline.setAttributeNS(null,"y2",(Chromosomes[i].ChrLength/CONVERSION+100));
+	for (var i = 0; i < RAW_CHR.length; i++) {
+		myline = document.createElementNS(svgNS,"line"); 
+		myline.setAttributeNS(null,"x1",0.8*MARGINS);
+		myline.setAttributeNS(null,"x2",WIDTH-0.5*MARGINS);
+		myline.setAttributeNS(null,"y1",(RAW_CHR[i].ChrLength/CONVERSION+130));
+		myline.setAttributeNS(null,"y2",(RAW_CHR[i].ChrLength/CONVERSION+130));
 		myline.setAttributeNS(null,"stroke","#C0C0C0");
+		myline.setAttributeNS(null,"style","pointer-events: none;");
 		myline.setAttributeNS(null,"stroke-width",1);
-		document.getElementById("BLOCKS_VIEW").appendChild(myline);		
+		document.getElementById("BLOCKS_VIEW").appendChild(myline);
 	}
+
 // 	Draw extremly light line every 1mbp.
 	if (CONVERSION<150000){
-		for (var i = 0; i < (longest/CONVERSION+250); i=i+1000000/CONVERSION) {
-			myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+		for (var i = 0; i < (longest/CONVERSION); i=i+1000000/CONVERSION) {
+			myline = document.createElementNS(svgNS,"line");
 			myline.setAttributeNS(null,"x1",0.8*SET_WIDTH);
-			myline.setAttributeNS(null,"x2",WIDTH-0.8*SET_WIDTH);
-			myline.setAttributeNS(null,"y1",i+100);
-			myline.setAttributeNS(null,"y2",i+100);
+			myline.setAttributeNS(null,"x2",WIDTH-0.5*SET_WIDTH);
+			myline.setAttributeNS(null,"y1",i+130);
+			myline.setAttributeNS(null,"y2",i+130);
 			myline.setAttributeNS(null,"stroke","#DCDCDC");
 			myline.setAttributeNS(null,"stroke-width",1);
+			myline.setAttributeNS(null,"style","pointer-events: none;");
 			myline.setAttributeNS(null,"stroke-dasharray","1 1");
 			document.getElementById("BLOCKS_VIEW").appendChild(myline);		
 		}
 	}
-
 // 	DRAW dashed line for 5mb (super light) and darker for 10mbp and ticks for them.
 	if (CONVERSION<300000){
 		var COUNTER=0;
-		for (var i = 0; i < (longest/CONVERSION+250); i=i+5000000/CONVERSION) {
-			myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+		for (var i = 0; i < (longest/CONVERSION); i=i+5000000/CONVERSION) {
+			myline = document.createElementNS(svgNS,"line");
 			myline.setAttributeNS(null,"x1",0.8*SET_WIDTH);
-			myline.setAttributeNS(null,"x2",WIDTH-0.8*SET_WIDTH);
-			myline.setAttributeNS(null,"y1",i+100);
-			myline.setAttributeNS(null,"y2",i+100);
+			myline.setAttributeNS(null,"x2",WIDTH-0.5*SET_WIDTH);
+			myline.setAttributeNS(null,"y1",i+130);
+			myline.setAttributeNS(null,"y2",i+130);
 			myline.setAttributeNS(null,"stroke","#808080");
+			myline.setAttributeNS(null,"style","pointer-events: none;");
 			myline.setAttributeNS(null,"stroke-width",1);
 			myline.setAttributeNS(null,"stroke-dasharray","1 1");
 			document.getElementById("BLOCKS_VIEW").appendChild(myline);	
 		}
 	}
+//Add text labels
 	var COUNTER=0;
-	for (var i = 0; i < (longest/CONVERSION+250); i=i+10000000/CONVERSION) {
-		myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+	for (var i = 0; i < (longest/CONVERSION); i=i+10000000/CONVERSION) {
+		myline = document.createElementNS(svgNS,"line"); 
 		myline.setAttributeNS(null,"x1",0.8*SET_WIDTH);
-		myline.setAttributeNS(null,"x2",WIDTH-0.8*SET_WIDTH);
-		myline.setAttributeNS(null,"y1",i+100);
-		myline.setAttributeNS(null,"y2",i+100);
+		myline.setAttributeNS(null,"x2",WIDTH-0.5*SET_WIDTH);
+		myline.setAttributeNS(null,"y1",i+130);
+		myline.setAttributeNS(null,"y2",i+130);
 		myline.setAttributeNS(null,"stroke","#000000");
+		myline.setAttributeNS(null,"style","pointer-events: none;");
 		myline.setAttributeNS(null,"stroke-width",1);
 		myline.setAttributeNS(null,"stroke-dasharray","1 1");
-		 mytext.setAttributeNS(null,"alignment-baseline","middle");
 		document.getElementById("BLOCKS_VIEW").appendChild(myline);	
 		var mytext = document.createElementNS(svgNS,"text"); 
 		mytext.setAttributeNS(null,"x",0.78*SET_WIDTH);
-		 mytext.setAttributeNS(null,"y",i+100);
+		 mytext.setAttributeNS(null,"y",i+130);
+		 mytext.setAttributeNS(null,"alignment-baseline","middle");
 		 mytext.setAttributeNS(null,"font-size","12px");    
+		mytext.setAttributeNS(null,"style","pointer-events: none;");
 		 mytext.setAttributeNS(null,"text-anchor","end");       		 	
 		mytext.innerHTML = COUNTER;
 		document.getElementById("BLOCKS_VIEW").appendChild(mytext); 
 		var mytext = document.createElementNS(svgNS,"text"); 
-		mytext.setAttributeNS(null,"x",WIDTH-0.78*SET_WIDTH);
-		 mytext.setAttributeNS(null,"y",i+100);
+		mytext.setAttributeNS(null,"x",WIDTH-0.48*SET_WIDTH);
+		 mytext.setAttributeNS(null,"y",i+130);
+		mytext.setAttributeNS(null,"style","pointer-events: none;");
 		 mytext.setAttributeNS(null,"alignment-baseline","middle");
 		 mytext.setAttributeNS(null,"font-size","12px");    
 		mytext.innerHTML = COUNTER;
 		document.getElementById("BLOCKS_VIEW").appendChild(mytext);            
 		COUNTER=COUNTER+10;
 	}
-	}
-
-
-
-
+}
 
 // Draw Chromsomes
-	var tracker=1;
-	// Loop over Chromosomes
-	for (var i = 0; i < Chromosomes.length; i++) {
+var tracker=0;
+var space_tracker=0;
+var lastref="";
+var lastchr="";
+var refstart=0;
+var refspacestart=1;
+for (var i = 0; i < RAW_CHR.length; i++) {
+    if(lastref != RAW_CHR[i].ref){
+/////////////////////////////////ADD REFRENCE TITLE HERE ON CHANGE///////////
+	if (lastref != ""){
+	var blockText = document.createElementNS(svgNS,"foreignObject"); 
+	var headfontsize=(SET_WIDTH*(tracker-refstart)+(space_tracker-refspacestart)*SET_SPACE)/(lastref.length-1);
+	headfontsize=parseInt(headfontsize);
+	if (headfontsize>25){headfontsize=25;}
+	blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH*(tracker-refstart)+SET_SPACE*(space_tracker-refspacestart) + ' style="text-align:center;font-size:' + headfontsize + 'px; text-transform: uppercase;word-wrap: break-word;color:black;">'+lastref+'<a/div>';
+	blockText.setAttribute('x', SET_WIDTH*refstart+SET_SPACE*refspacestart);
+	blockText.setAttribute('y', 5);
+	blockText.setAttributeNS(null,"style","pointer-events: none;");
+	blockText.setAttribute('width', SET_WIDTH*(tracker-refstart)+(space_tracker-refspacestart)*SET_SPACE);
+	blockText.setAttributeNS(null,"height",25);
+	document.getElementById("BLOCKS_VIEW").appendChild(blockText);
+
+//DRAW FIRST UP LINE
+	myline = document.createElementNS(svgNS,"line");
+	myline.setAttributeNS(null,"x1",(SET_WIDTH*refstart+SET_SPACE*refspacestart));
+	myline.setAttributeNS(null,"x2",SET_WIDTH*refstart+SET_SPACE*refspacestart);
+	myline.setAttributeNS(null,"y1",3);
+	myline.setAttributeNS(null,"y2",30);
+	myline.setAttributeNS(null,"stroke","#808080");
+	myline.setAttributeNS(null,"style","pointer-events: none;");
+	myline.setAttributeNS(null,"stroke-width",3);
+	document.getElementById("BLOCKS_VIEW").appendChild(myline);	
+
+	myline = document.createElementNS(svgNS,"line");
+	myline.setAttributeNS(null,"x1",(SET_WIDTH*tracker+SET_SPACE*space_tracker));
+	myline.setAttributeNS(null,"x2",SET_WIDTH*tracker+SET_SPACE*space_tracker);
+	myline.setAttributeNS(null,"y1",3);
+	myline.setAttributeNS(null,"y2",30);
+	myline.setAttributeNS(null,"stroke","#808080");
+	myline.setAttributeNS(null,"style","pointer-events: none;");
+	myline.setAttributeNS(null,"stroke-width",3);
+	document.getElementById("BLOCKS_VIEW").appendChild(myline);	
+
+	myline = document.createElementNS(svgNS,"line");
+	myline.setAttributeNS(null,"x1",(SET_WIDTH*refstart+SET_SPACE*refspacestart));
+	myline.setAttributeNS(null,"x2",SET_WIDTH*tracker+SET_SPACE*space_tracker);
+	myline.setAttributeNS(null,"y1",3);
+	myline.setAttributeNS(null,"y2",3);
+	myline.setAttributeNS(null,"stroke","#808080");
+	myline.setAttributeNS(null,"style","pointer-events: none;");
+	myline.setAttributeNS(null,"stroke-width",3);
+	document.getElementById("BLOCKS_VIEW").appendChild(myline);	
+	}
+    	lastref=RAW_CHR[i].ref;
+    	space_tracker++;
+	refstart=tracker;
+	refspacestart=space_tracker+1;
+    }    space_tracker++;
+    if(lastchr != RAW_CHR[i].ChrID){
+    	lastchr=RAW_CHR[i].ChrID;
+//Write the Chromosme Title Top.
+	var blockText = document.createElementNS(svgNS,"foreignObject"); 
+	var headfontsize=SET_WIDTH*RAW_CHR[i].que.length/(RAW_CHR[i].ChrID.length-1);
+	headfontsize=parseInt(headfontsize);
+	if (headfontsize>25){headfontsize=25;}
+	blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH*RAW_CHR[i].que.length +' style="text-align:center;font-size:' + headfontsize + 'px; text-transform: uppercase;word-wrap: break-word;color:black;">'+RAW_CHR[i].ChrID+'<a/div>';
+	blockText.setAttribute('x', tracker*SET_WIDTH+space_tracker*SET_SPACE);
+	blockText.setAttribute('y', 35);
+	blockText.setAttributeNS(null,"style","pointer-events: none;");
+	blockText.setAttribute('width', SET_WIDTH*RAW_CHR[i].que.length);
+	blockText.setAttributeNS(null,"height",25);
+	document.getElementById("BLOCKS_VIEW").appendChild(blockText);
+	/*
+//Write the Chromosme Title Bottom.
+	var blockText = document.createElementNS(svgNS,"foreignObject"); 
+	blockText.setAttribute('x', tracker*SET_WIDTH+ space_tracker*SET_SPACE);
+	blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH*RAW_CHR[i].que.length +' style="text-align:center;font-size:' + headfontsize + 'px; text-transform: uppercase;word-wrap: break-word;color:black;">'+RAW_CHR[i].ChrID+'<a/div>';
+	blockText.setAttributeNS(null,"height",25);
+	blockText.setAttribute('y', (RAW_CHR[i].ChrLength/parseInt(CONVERSION))+200);
+	blockText.setAttributeNS(null,"style","pointer-events: none;");
+	blockText.setAttribute('width', SET_WIDTH*RAW_CHR[i].que.length);
+	document.getElementById("BLOCKS_VIEW").appendChild(blockText);
+*/
+	}
+	for (var j = 0; j < RAW_CHR[i].que.length; j++) {
 	
-// 		Write the Chromosme Title Top.
-		var blockText = document.createElementNS(svgNS,"foreignObject"); 
-		var headfontsize=SET_WIDTH*Que_Genome.length/(Chromosomes[i].ChrID.length-1);
-		headfontsize=parseInt(headfontsize);
-		if (headfontsize>25){headfontsize=25;}
-		blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH*Que_Genome.length +' style="text-align:center;font-size:' + headfontsize + 'px; text-transform: uppercase;word-wrap: break-word;color:black;">'+Chromosomes[i].ChrID+'<a/div>';
-
-		blockText.setAttribute('x', tracker*SET_WIDTH);
-		blockText.setAttribute('y', 5);
-		blockText.setAttribute('width', SET_WIDTH*Que_Genome.length);
-		blockText.setAttributeNS(null,"height",25);
-		document.getElementById("BLOCKS_VIEW").appendChild(blockText);
-// 		Write the Chromosme Title Bottom.
-		var blockText = document.createElementNS(svgNS,"foreignObject"); 
-		blockText.setAttribute('x', tracker*SET_WIDTH);
-		blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH*Que_Genome.length +' style="text-align:center;font-size:' + headfontsize + 'px; text-transform: uppercase;word-wrap: break-word;color:black;">'+Chromosomes[i].ChrID+'<a/div>';
-		blockText.setAttributeNS(null,"height",25);
-
-		blockText.setAttribute('y', (Chromosomes[i].ChrLength/parseInt(CONVERSION))+205);
-		blockText.setAttribute('width', SET_WIDTH*Que_Genome.length);
-		document.getElementById("BLOCKS_VIEW").appendChild(blockText);
-
-
-	// Loop over Blocks
-		for (var j = 0; j < Que_Genome.length; j++) {
-
+		TEMPQUERY=RAW_CHR[i].que[j];
 // Write the comparison genomes top
-			var allthetext="012345678901234567890123456";
-			var genusfound=false;
-			Species_details.forEach(function (arrayItem) {
-// 						console.log(arrayItem);
-			if (arrayItem.Taxid ==Que_Genome[j].substr(1)){
+		var allthetext="012345678901234567890123456";
+		var genusfound=false;
+		Species_details.forEach(function (arrayItem) {
+			if (arrayItem.Taxid ==TEMPQUERY){
 				allthetext=arrayItem.Name;
-		 		genusfound=true;
-	
-				}
-	});				
+			 	genusfound=true;
+			}
+		});				
 		if (genusfound==false){
-			allthetext=Que_Genome[j].substr(1);
-		};
-// 
-
+			allthetext=TEMPQUERY;
+		}
+//These lines adds space where needed
 	var vartextbits=allthetext.match(/[\s\S]{1,20}/g) || [];
-// 	
-	var Xposition = tracker*SET_WIDTH;
-
+	var Xposition = tracker*SET_WIDTH+space_tracker*SET_SPACE;
+//Top text
 	for (var m = 0; m < vartextbits.length; m++) {
-// 			Top text
-	
-			if (Xposition<((tracker+1)*SET_WIDTH)-30){
-			var Yposition = 50;
+		if (Xposition<((tracker+1)*SET_WIDTH+space_tracker*SET_SPACE)-SET_SPACE){
+			var Yposition = 80;
 			var Boxwidth = SET_WIDTH;
 			var Boxheight=60;
 			var Rotateval='rotate('+ -20 +','+Xposition+','+Yposition+')';
@@ -528,321 +909,162 @@ Species_details.forEach(function (arrayItem) {
 			blockText.setAttribute('width', Boxwidth);
 			blockText.setAttributeNS(null,"height",Boxheight);
 			blockText.setAttributeNS(null,"transform",Rotateval);
+			blockText.setAttributeNS(null,"style","pointer-events: none;");
 			blockText.innerHTML=vartextbits[m];
 			document.getElementById("BLOCKS_VIEW").appendChild(blockText);
-			
-// 			Bottom text
-// 			var blockText = document.createElementNS(svgNS,"text"); 
-// 			Yposition =(Chromosomes[i].ChrLength/parseInt(CONVERSION)+110);
-// 			 Rotateval='rotate('+ 20 +','+Xposition+','+Yposition+')';
-// 			blockText.setAttribute('x', Xposition+20);
-// 			blockText.setAttribute('y', Yposition);
-// 			blockText.setAttribute('width', Boxwidth);
-// 			blockText.setAttributeNS(null,"height",Boxheight);
-// 			blockText.setAttributeNS(null,"transform",Rotateval);
-// 			blockText.innerHTML=vartextbits[m];
-// 			document.getElementById("BLOCKS_VIEW").appendChild(blockText);			
-// 
-// 			
-			
- 			Xposition = Xposition+40;
-	
-	 		}
-// 	
-// 	
-// 	
-// 	
+/*
+		    // 			Bottom text
+ 			var blockText = document.createElementNS(svgNS,"text"); 
+ 			Yposition =(RAW_CHR[i].ChrLength/parseInt(CONVERSION)+110);
+			Rotateval='rotate('+ 20 +','+Xposition+','+Yposition+')';
+ 			blockText.setAttribute('x', Xposition+20);
+ 			blockText.setAttribute('y', Yposition);
+ 			blockText.setAttribute('width', Boxwidth);
+ 			blockText.setAttributeNS(null,"height",Boxheight);
+			blockText.setAttributeNS(null,"style","pointer-events: none;");
+ 			blockText.setAttributeNS(null,"transform",Rotateval);
+ 			blockText.innerHTML=vartextbits[m];
+ 			document.getElementById("BLOCKS_VIEW").appendChild(blockText);			
+ 		*/
+		    Xposition = Xposition+40;
+
+		    }
 	}
-	
+		
+//Block_Array
+	var tester=RAW_CHR[i].ChrID + "_" + TEMPQUERY;
+	var myChrome = document.createElementNS(svgNS,"rect");  
+	myChrome.setAttributeNS(null,"id",tester);
+	myChrome.setAttributeNS(null,"x",tracker*SET_WIDTH+space_tracker*SET_SPACE);
+	myChrome.setAttributeNS(null,"width",SET_WIDTH);
+	myChrome.setAttributeNS(null,"rx",15);
+	myChrome.setAttributeNS(null,"ry",15);
+	myChrome.setAttributeNS(null,"stroke","black");
+	myChrome.setAttributeNS(null,"stroke-width",2);
+	myChrome.setAttributeNS(null,"fill",CHR_COLOR);
+	var CHRLENGTH=RAW_CHR[i].ChrLength/CONVERSION;
+//var endpos=250-CHRLENGTH;
+	myChrome.setAttributeNS(null,"y",130);
+	myChrome.setAttributeNS(null,"height",CHRLENGTH);			
+	document.getElementById("BLOCKS_VIEW").appendChild(myChrome);
 
-		
-// 		Block_Array
-		
-			var tester=Chromosomes[i].ChrID + "_" + Que_Genome[j];
+////////////////////////////////////////////////////////////////
+		    //CALCULATE THE BREAKPONTS HERE!!!
+	if (SHOW_BREAKS==true){ 
+		var sizetracker=[];
+		    var startoder=[];
+//Loop over the blockarray and add all the sizes for objects that match query and subject
+		for (var p = 0; p < RAW_BLOCKS.length; p++) {
+			if (RAW_BLOCKS[p].Ref==RAW_CHR[i].ref && RAW_BLOCKS[p].Que ==TEMPQUERY && RAW_BLOCKS[p].RefChr==RAW_CHR[i].ChrID){
+		    sizetracker.push(RAW_BLOCKS[p].RefStart+"__"+RAW_BLOCKS[p].RefEnd);
+		    startoder.push(parseInt(RAW_BLOCKS[p].RefStart));
+			}
+		}
+	startoder.sort(function(a, b){return a-b});
+	var firstone=true;
+	var lastend=0;
+	var laststart=0;
+	for (var p = 0; p < startoder.length; p++) {
+// Get the actual string for it
+		var match ="";
+		var teststring=startoder[p]+"__";
+		var re = new RegExp(teststring,"g");
+			for (var q = 0; q < sizetracker.length; q++) {
+				if (re.test(sizetracker[q])){
+		    			match=sizetracker[q];
+				    }
+		   	}
+		var tempstorage=match.split('__');
+		if (firstone==true){
+			firstone=false;
+			laststart=tempstorage[0];
+		    	lastend=tempstorage[1];
+		    }else{
+		    if (tempstorage[0]-lastend>0){
+		    //reminder lastend is the start of the block and tempstorage[0] is the end
 			var myChrome = document.createElementNS(svgNS,"rect");  
-			myChrome.setAttributeNS(null,"id",tester);
-			myChrome.setAttributeNS(null,"x",tracker*SET_WIDTH);
+	var tester=RAW_CHR[i].ChrID.toString() + "__ __" + lastend.toString() + "__" + tempstorage[0].toString() + "__" + (tempstorage[0]-lastend).toString() + "__" +   TEMPQUERY+ "__ __ __ __" +  RAW_CHR[i].ref  ;
+		    	myChrome.setAttributeNS(null,"id",tester);
+			myChrome.setAttributeNS(null,"x",tracker*SET_WIDTH+space_tracker*SET_SPACE);
 			myChrome.setAttributeNS(null,"width",SET_WIDTH);
-			myChrome.setAttributeNS(null,"rx",15);
-			myChrome.setAttributeNS(null,"ry",15);
+			myChrome.setAttributeNS(null,"rx",2);
+			myChrome.setAttributeNS(null,"ry",2);
 			myChrome.setAttributeNS(null,"stroke","black");
-			myChrome.setAttributeNS(null,"stroke-width",2);
-			myChrome.setAttributeNS(null,"fill",CHR_COLOR);
-//               	myChrome.setAttributeNS(null,"fill-opacity",0.1);
-          	
-            	var CHRLENGTH=Chromosomes[i].ChrLength/CONVERSION;
-				// set it for length
-// 				var endpos=250-CHRLENGTH;
-	       		 myChrome.setAttributeNS(null,"y",100);
-       		 	myChrome.setAttributeNS(null,"height",CHRLENGTH);			
-				
-				document.getElementById("BLOCKS_VIEW").appendChild(myChrome);
-				
-				
-				
-				
-				
-				
-				
-				
-				
-// 				Add select all button; 
-		if (SELECT_ALL_BUTTON==true){
-				var myChrome = document.createElementNS(svgNS,"rect");  
-				 tester=Chromosomes[i].ChrID + "_" + Que_Genome[j].substring(1);
-	          	myChrome.setAttributeNS(null,"id",tester);
-            	myChrome.setAttributeNS(null,"x",tracker*SET_WIDTH);
-            	myChrome.setAttributeNS(null,"width",SET_WIDTH);
-            	myChrome.setAttributeNS(null,"rx",15);
-            	myChrome.setAttributeNS(null,"ry",15);
-            	myChrome.setAttributeNS(null,"stroke","black");
-            	myChrome.setAttributeNS(null,"stroke-width",2);
-            	myChrome.setAttributeNS(null,"fill","yellow");
-            	myChrome.setAttributeNS(null,"y",CHRLENGTH+240);
-				myChrome.setAttributeNS(null,"height",90);
-				myChrome.onclick = function(){
-					var a = document.getElementById(this.id);
-					for (var z = 0; z < Block_Array.length; z++) {
-						console.log("a"+ a.id+"blk"+Block_Array[z]);
-						if(Block_Array[z]==a.id){
-							console.log(SELECT_ALL_THING[z]);
-							var runtrhough=SELECT_ALL_THING[z].split(/XXXXXX/g) || [];
-							var track=true;
-							for (var y = 0; y < runtrhough.length; y++) {
-								if (Selected.includes(runtrhough[y])){
-								}else{
-									track=false;
-									
-									Selected.push(runtrhough[y]);
-								}
-							
-							}
-							
-							
-							if (track==true){
-								for (var y = 0; y < runtrhough.length; y++) {
-									var index = Selected.indexOf(runtrhough[y]);
-									Selected.splice(index, 1); 
-								}
+			myChrome.setAttributeNS(null,"stroke-width",1);
+			if (Selected.includes(tester)){
+		    		myChrome.setAttributeNS(null,"fill",SEL_BRK_COLOR);
+		    	}else{
+		    		myChrome.setAttributeNS(null,"fill",BRK_COLOR);
 
-							
-							}
-								          				
-
-							
-						}
-	
-		
-		
-					}
-
-					make_SVG();
-				}
-// 					
-
-// 				Add Select all text
-				if(SET_WIDTH>49){
-					var blockText = document.createElementNS(svgNS,"foreignObject"); 
-					var textsize=LABEL_FONT_SIZE;
-					if (LABEL_FONT_SIZE=="Responsive"){
-						textsize=SET_WIDTH/5;
-						textsize=parseInt(textsize);
-						if (textsize>16){
-							textsize=16
-					};
-				}	
-				if (LABEL_SHADOW==true){
-				blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH +' style="text-align:center;font-size:' + textsize + 'px; text-transform: uppercase;word-wrap: break-word;color:'+LABEL_COLOR+';text-shadow: -1px 1px 0 #000,1px 1px 0 #000,1px -1px 0 #000;-1px -1px 0 #000;">SELECT ALL</div>';
-				
-				}else{
-				
-				blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH +' style="text-align:center;font-size:' + textsize + 'px; text-transform: uppercase;word-wrap: break-word;color:'+LABEL_COLOR+';">SELECT ALL<a/div>';
-				}
-				
-				
-				
-				blockText.setAttribute('x', tracker*SET_WIDTH);
-				blockText.setAttribute('y', CHRLENGTH+270);
-				blockText.setAttribute('width', SET_WIDTH);
-				blockText.setAttributeNS(null,"height",90);
-				blockText.setAttributeNS(null,"style","pointer-events: none;");
-
-			}
-
-// #####################
-// ##################### ADD onclick
-// #####################				
-				
-				
-				document.getElementById("BLOCKS_VIEW").appendChild(myChrome);
-				if(SET_WIDTH>49){
-					document.getElementById("BLOCKS_VIEW").appendChild(blockText);
-					}
-				}
-				
-// 				Create the tracker array
-				Block_Array[tracker]=Chromosomes[i].ChrID + "_" + Que_Genome[j].substring(1);
-				// console.log(Block_Array);
-	tracker=tracker+1;
-			}
-
-	tracker=tracker+1;
-
-		}
-// ##############DRAW BLOCKS HERE
-
-	for (var i = 0; i < Blocks.length; i++) {
-			var CHR_NUMB=0;
-			var CHR_LENTH=0;
-			for (var k = 0; k < Chromosomes.length; k++) {
-				if (Chromosomes[k].ChrID == Blocks[i].RefChr){
-					CHR_NUMB=k;
-					CHR_LENTH=Chromosomes[k].ChrLength;
-				}
-			}
-		var tester=Blocks[i].RefChr + "__" + Blocks[i].QueChr + "__" + Blocks[i].RefStart + "__" + Blocks[i].RefEnd + "__" + CHR_LENTH+ "__" +  Blocks[i].Qid+ "__" +  Blocks[i].QueStart+ "__" +  Blocks[i].QueEnd+ "__" +  Blocks[i].Direction+ "__" +  Genome_Name;
-		var myBlock = document.createElementNS(svgNS,"rect");  
-//		
-		var chrstring=Blocks[i].RefChr+"_"+Blocks[i].Qid;
-		for (var z = 0; z < Block_Array.length; z++) {
-			if(Block_Array[z]==chrstring){
-				var newstring="XXXXXX"+tester;
-				SELECT_ALL_THING[z]=SELECT_ALL_THING[z]+newstring;
-//  			console.log(SELECT_ALL_THING[z]);
-			
-			}
-		}
-
-		
-		
-	        myBlock.setAttributeNS(null,"id",tester);
-// 	        See where it belongs
-// 		Get Chr position
-
-// 			console.log(Que_Genome.indexOf(Blocks[i].Que_Genome))
-			var widthval=((CHR_NUMB*(Que_Genome.length+1))+Que_Genome.indexOf("Q" + Blocks[i].Qid)+1);
-            myBlock.setAttributeNS(null,"x",widthval*SET_WIDTH);
-            myBlock.setAttributeNS(null,"width",SET_WIDTH);
-            	myBlock.setAttributeNS(null,"rx",2);
-            	myBlock.setAttributeNS(null,"ry",2);
-            myBlock.setAttributeNS(null,"stroke","black");
-            myBlock.setAttributeNS(null,"stroke-width",1);
-            if (Selected.includes(tester)){
-           		 if(Blocks[i].Direction=="+1"){
-            		myBlock.setAttributeNS(null,"fill",FORWARD_HIGHLIGHT);
-           		 }else{
-            		myBlock.setAttributeNS(null,"fill",REVERSE_HIGHLIGHT);
-            	}      
-            }else if(Blocks[i].Direction=="+1"){
-            	myBlock.setAttributeNS(null,"fill",FORWARD_COLOR);
-            }else{
-            	myBlock.setAttributeNS(null,"fill",REVERSE_COLOR);
-            }          	
-            	var CHRLENGTH=(Blocks[i].RefEnd-Blocks[i].RefStart)/CONVERSION;
-				// set it for length
-// 				var endpos=250-CHRLENGTH;
-	       	myBlock.setAttributeNS(null,"y",(Blocks[i].RefStart/CONVERSION)+100);
-       		myBlock.setAttributeNS(null,"height",CHRLENGTH);
-//        		ADD Text labels
-			var textsize=LABEL_FONT_SIZE;
-			if(CHRLENGTH>20){
-				var blockText = document.createElementNS(svgNS,"foreignObject"); 
-				var textsize=LABEL_FONT_SIZE;
-				if (LABEL_FONT_SIZE=="Responsive"){
-					textsize=SET_WIDTH/5;
-					textsize=parseInt(textsize);
-					if (textsize>16){
-						textsize=16
-					};
-				}	
-				if (LABEL_SHADOW==true){
-				blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH +' style="text-align:center;font-size:' + textsize + 'px; text-transform: uppercase;word-wrap: break-word;color:'+LABEL_COLOR+';text-shadow: -1px 1px 0 #000,1px 1px 0 #000,1px -1px 0 #000;-1px -1px 0 #000;">'+Blocks[i].QueChr+'</div>';
-				
-				}else{
-				
-				blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH +' style="text-align:center;font-size:' + textsize + 'px; text-transform: uppercase;word-wrap: break-word;color:'+LABEL_COLOR+';">'+Blocks[i].QueChr+'<a/div>';
-				}
-				
-				
-				
-				blockText.setAttribute('x', widthval*SET_WIDTH);
-				blockText.setAttribute('y', (Blocks[i].RefStart/CONVERSION)+100);
-				blockText.setAttribute('width', SET_WIDTH);
-				blockText.setAttributeNS(null,"height",CHRLENGTH);
-				blockText.setAttributeNS(null,"style","pointer-events: none;");
-			}
-       		
-//        		ON CLICK FUNCTION
-			myBlock.onclick = function(){
+		    }
+		    	var breaklength=(tempstorage[0]-lastend)/CONVERSION;
+			myChrome.setAttributeNS(null,"y",(lastend/CONVERSION)+130);
+			myChrome.setAttributeNS(null,"height",breaklength);			
+//onclick
+			myChrome.onclick = function(){
 				var a = document.getElementById(this.id);
+				var tempstorage=a.id.split('__');
 				if (Selected.includes(a.id)){
+					a.setAttributeNS(null,"fill",BRK_COLOR);
 					var index = Selected.indexOf(a.id);
- 					Selected.splice(index, 1);     				
+					Selected.splice(index, 1);     				
 				}else{
+					a.setAttributeNS(null,"fill",SEL_BRK_COLOR);
 					Selected.push(a.id)
 				}
-
-				make_SVG();
+				fill_csv_region();
 			}
+		
 
-// ON HOVER FUNCTION
-       		
-       		myBlock.onmouseenter= function(e) {
-       			var supertester = document.getElementById("temp");
-       			if (supertester){
-       			}else{
-		  			var x = e.clientX;
-		  			var y = e.clientY;
-					var svgP = svgPoint(myBlock, x, y);
-   					var mytemp = document.createElementNS(svgNS, 'rect');
-  					mytemp.setAttributeNS(null, 'id', "temp");   		
-  					mytemp.setAttributeNS(null,"x",svgP.x);
-  					mytemp.setAttributeNS(null,"width",400);
-  					mytemp.setAttributeNS(null,"y",svgP.y);
-    				mytemp.setAttributeNS(null,"height",220);
-            		mytemp.setAttributeNS(null,"rx",20);
-            		mytemp.setAttributeNS(null,"ry",20);
-            		mytemp.setAttributeNS(null,"stroke","black");
+			myChrome.onmouseenter= function(e) {
+				var supertester = document.getElementById("temp");
+				if (!supertester){
+					var x = e.clientX;
+					var y = e.clientY;
+					var svgP = svgPoint(myChrome, x, y);
+					var mytemp = document.createElementNS(svgNS, 'rect');
+					mytemp.setAttributeNS(null, 'id', "temp");   		
+					mytemp.setAttributeNS(null,"x",svgP.x);
+					mytemp.setAttributeNS(null,"width",400);
+					mytemp.setAttributeNS(null,"y",svgP.y);
+					mytemp.setAttributeNS(null,"height",220);
+					mytemp.setAttributeNS(null,"rx",20);
+					mytemp.setAttributeNS(null,"ry",20);
+					mytemp.setAttributeNS(null,"stroke","black");
 					mytemp.setAttributeNS(null,"stroke-width",1);
 					mytemp.setAttributeNS(null,"fill","white");
-  					document.getElementById("BLOCKS_VIEW").appendChild(mytemp);
-
+					document.getElementById("BLOCKS_VIEW").appendChild(mytemp);
+//Add text
 					var mytemptext = document.createElementNS(svgNS,"text"); 
 					var xcoord=svgP.x+20;
 					mytemptext.setAttributeNS(null, 'id', "temptext");   		
+					mytemptext.setAttributeNS(null,"style","pointer-events: none;");
 					mytemptext.setAttributeNS(null,"x",xcoord);
 					mytemptext.setAttributeNS(null,"y",svgP.y+20);
 					mytemptext.setAttributeNS(null,"font-size","12px");
-		
-// 					test if the id for the query genome is found in the database.
+//test if the id for the query genome is found in the database.
 					var tempor = this.id;
 					var tempstorage=tempor.split('__');
-// If not only list REFRENCE\tCHR\n \Total Length Start\nStop\nQuery Start\Stop
-// 					console.log(tempstorage);
-					var REFOUND=false;;
+					var REFOUND=false;
 					var QUERYFOUND=false;
-// 					console.log(Species_details);
 					Species_details.forEach(function (arrayItem) {
-// 						console.log(arrayItem);
-					if (arrayItem.Taxid ==Genome_Name){
+					if (arrayItem.Taxid ==tempstorage[9]){
 						mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan font-weight="bold">'+"Reference: "+arrayItem.Common_Name+'</tspan>';
 						mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan dy="1em" x="'+xcoord+'">'+"Reference Genome: "+arrayItem.Name + "   "+arrayItem.Assembly+'</tspan>';
 						mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan dy="1em" x="'+xcoord+'">'+"Reference taxID: "+Genome_Name +'</tspan>';
 						REFOUND=true;
-						}else if (arrayItem.Taxid == tempstorage[5]){
-	
-						}
+					}
 					});					
 					if (REFOUND==false){
-						mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan font-weight="bold" dy="1em" x="'+xcoord+'">'+"Reference Genome: "+Genome_Name +'</tspan>';
+						mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan font-weight="bold" dy="1em" x="'+xcoord+'">'+"Reference Genome: "+tempstorage[9] +'</tspan>';
 					}
+					mytemptext.setAttributeNS(null,"style","pointer-events: none;");
+					mytemptext.setAttributeNS(null,"style","pointer-events: none;");
 					mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Reference Chromsome: "+tempstorage[0] +'</tspan>';
 					mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Reference Start: "+tempstorage[2] +'</tspan>';
 					mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Reference End: "+tempstorage[3] +'</tspan>';					
 					mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Reference Chromosome Length: "+Math.round(tempstorage[4]/1000000) +"mbp"+'</tspan>';
-
 					Species_details.forEach(function (arrayItem) {
-// 						console.log(arrayItem);
 					if (arrayItem.Taxid ==tempstorage[5]){
 						mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan font-weight="bold" dy="1em" x="'+xcoord+'">'+"Query: " + arrayItem.Common_Name+'</tspan>';
 						mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan dy="1em" x="'+xcoord+'">'+"Query Genome: "+arrayItem.Name + "   "+arrayItem.Assembly+'</tspan>';
@@ -854,11 +1076,250 @@ Species_details.forEach(function (arrayItem) {
 						mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan font-weight="bold" dy="1em" x="'+xcoord+'">'+"Query Genome: "+tempstorage[5] +'</tspan>';
 					}
 
-					mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Query Chromosome: "+tempstorage[1] +'</tspan>';
-					mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Query Start: "+tempstorage[6] +'</tspan>';
-					mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Query End: "+tempstorage[7] +'</tspan>';
+			document.getElementById("BLOCKS_VIEW").appendChild(mytemptext);
+		}
+	};
+	myChrome.onmouseleave = function(){
+		var c = document.getElementById("temptext");
+		c.remove();       		
+		var b = document.getElementById("temp");
+		b.remove();
+	}
+
+		document.getElementById("BLOCKS_VIEW").appendChild(myChrome);
+
+		    laststart=tempstorage[0];
+		    	lastend=tempstorage[1];
+																 } }
+
+	}
+	}
+	tracker++;			
+
+	}
+}
+var blockText = document.createElementNS(svgNS,"foreignObject"); 
+var headfontsize=SET_WIDTH*(tracker+space_tracker-refstart)/(lastref.length-1);
+headfontsize=parseInt(headfontsize);
+if (headfontsize>25){headfontsize=25;}
+blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH*(tracker-refstart)+SET_SPACE*(space_tracker-refspacestart) + ' style="text-align:center;font-size:' + headfontsize + 'px; text-transform: uppercase;word-wrap: break-word;color:black;">'+lastref+'<a/div>';
+blockText.setAttribute('x', SET_WIDTH*refstart+SET_SPACE*refspacestart);
+blockText.setAttribute('y', 5);
+blockText.setAttributeNS(null,"style","pointer-events: none;");
+blockText.setAttribute('width', SET_WIDTH*(tracker-refstart)+(space_tracker-refspacestart)*SET_SPACE);
+blockText.setAttributeNS(null,"height",25);
+document.getElementById("BLOCKS_VIEW").appendChild(blockText);
+
+//DRAW FIRST UP LINE
+myline = document.createElementNS(svgNS,"line");
+myline.setAttributeNS(null,"x1",(SET_WIDTH*refstart+SET_SPACE*refspacestart));
+myline.setAttributeNS(null,"x2",SET_WIDTH*refstart+SET_SPACE*refspacestart);
+myline.setAttributeNS(null,"y1",3);
+myline.setAttributeNS(null,"y2",30);
+myline.setAttributeNS(null,"stroke","#808080");
+myline.setAttributeNS(null,"style","pointer-events: none;");
+myline.setAttributeNS(null,"stroke-width",3);
+document.getElementById("BLOCKS_VIEW").appendChild(myline);	
+
+myline = document.createElementNS(svgNS,"line");
+myline.setAttributeNS(null,"x1",(SET_WIDTH*tracker+SET_SPACE*space_tracker));
+myline.setAttributeNS(null,"x2",SET_WIDTH*tracker+SET_SPACE*space_tracker);
+myline.setAttributeNS(null,"y1",3);
+myline.setAttributeNS(null,"y2",30);
+myline.setAttributeNS(null,"stroke","#808080");
+myline.setAttributeNS(null,"style","pointer-events: none;");
+myline.setAttributeNS(null,"stroke-width",3);
+document.getElementById("BLOCKS_VIEW").appendChild(myline);	
+
+myline = document.createElementNS(svgNS,"line");
+myline.setAttributeNS(null,"x1",(SET_WIDTH*refstart+SET_SPACE*refspacestart));
+myline.setAttributeNS(null,"x2",SET_WIDTH*tracker+SET_SPACE*space_tracker);
+myline.setAttributeNS(null,"y1",3);
+myline.setAttributeNS(null,"y2",3);
+myline.setAttributeNS(null,"stroke","#808080");
+myline.setAttributeNS(null,"style","pointer-events: none;");
+myline.setAttributeNS(null,"stroke-width",3);
+document.getElementById("BLOCKS_VIEW").appendChild(myline);	
+
+    
+// ##############DRAW BLOCKS HERE
+
+for (var i = 0; i < RAW_BLOCKS.length; i++) {
+	var lastref="";
+	var lastchr="";
+	var CHR_NUMB=0;
+	var CHR_LENTH=0;
+	var spc_count=-2;
+	var chrcount=0;
+	var found=false;
+	for (var k = 0; k < RAW_CHR.length; k++) {
+		if (found==false){
+	    		if (lastref==RAW_CHR[k].ref){
+				spc_count++;	
+	    		}else{
+				spc_count++;
+				spc_count++;
+	    			lastref=RAW_CHR[k].ref
+	    		}
+
+		}
+		for (var l = 0; l < RAW_CHR[k].que.length; l++) {
+			if (found==false){
+				chrcount++;
+	 		}
+	    		
+		    	if (RAW_BLOCKS[i].Que == RAW_CHR[k].que[l] && RAW_BLOCKS[i].RefChr == RAW_CHR[k].ChrID){
+				found = true;	
+				CHR_LENTH=RAW_CHR[k].ChrLength;
+	    		}
+		}
+	}
+	var tester=RAW_BLOCKS[i].RefChr + "__" + RAW_BLOCKS[i].QueChr + "__" + RAW_BLOCKS[i].RefStart + "__" + RAW_BLOCKS[i].RefEnd + "__" + CHR_LENTH + "__" +  RAW_BLOCKS[i].Que + "__" +  RAW_BLOCKS[i].QueStart+ "__" +  RAW_BLOCKS[i].QueEnd + "__" +  RAW_BLOCKS[i].Direction + "__" +  RAW_BLOCKS[i].Ref ;
+	var myBlock = document.createElementNS(svgNS,"rect");  
+	var chrstring=RAW_BLOCKS[i].RefChr + "_" + RAW_BLOCKS[i].Que;
+	myBlock.setAttributeNS(null,"id",tester);
+///////////////////GOT no idea wtf I was doing here. Leaving the old one and starting new
+//	var widthval=((CHR_NUMB*(Que_Genome.length+1))+Que_Genome.indexOf("Q" + Blocks[i].Qid)+1);
+	var widthval=(SET_WIDTH*chrcount+SET_SPACE*spc_count);
+	myBlock.setAttributeNS(null,"x",widthval);
+	myBlock.setAttributeNS(null,"width",SET_WIDTH);
+	myBlock.setAttributeNS(null,"rx",2);
+	myBlock.setAttributeNS(null,"ry",2);
+	myBlock.setAttributeNS(null,"stroke","black");
+	myBlock.setAttributeNS(null,"stroke-width",1);
+	if (Selected.includes(tester)){
+		if(RAW_BLOCKS[i].Direction=="+1"){
+			myBlock.setAttributeNS(null,"fill",FORWARD_HIGHLIGHT);
+		}else{
+			myBlock.setAttributeNS(null,"fill",REVERSE_HIGHLIGHT);
+		}      
+	}else if(RAW_BLOCKS[i].Direction=="+1"){
+		myBlock.setAttributeNS(null,"fill",FORWARD_COLOR);
+	}else{
+		myBlock.setAttributeNS(null,"fill",REVERSE_COLOR);
+	}          	
+	var CHRLENGTH=(RAW_BLOCKS[i].RefEnd-RAW_BLOCKS[i].RefStart)/CONVERSION;
+	myBlock.setAttributeNS(null,"y",(RAW_BLOCKS[i].RefStart/CONVERSION)+130);
+	myBlock.setAttributeNS(null,"height",CHRLENGTH);
+//ADD Text labels
+	var textsize=LABEL_FONT_SIZE;
+	if(CHRLENGTH>20){
+		var blockText = document.createElementNS(svgNS,"foreignObject"); 
+		var textsize=LABEL_FONT_SIZE;
+		if (LABEL_FONT_SIZE=="Responsive"){
+			textsize=SET_WIDTH/5;
+			textsize=parseInt(textsize);
+			if (textsize>16){
+				textsize=16
+			};
+		}	
+		if (LABEL_SHADOW==true){
+			blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH +' style="text-align:center;font-size:' + textsize + 'px; text-transform: uppercase;word-wrap: break-word;color:'+LABEL_COLOR+';text-shadow: -1px 1px 0 #000,1px 1px 0 #000,1px -1px 0 #000;-1px -1px 0 #000;">'+RAW_BLOCKS[i].QueChr+'</div>';
+		}else{
+			blockText.innerHTML='<div xmlns="http://www.w3.org/1999/xhtml" width='+ SET_WIDTH +' style="text-align:center;font-size:' + textsize + 'px; text-transform: uppercase;word-wrap: break-word;color:'+LABEL_COLOR+';">'+RAW_BLOCKS[i].QueChr+'<a/div>';
+		}
+		blockText.setAttribute('x', widthval);
+		blockText.setAttribute('y', (RAW_BLOCKS[i].RefStart/CONVERSION)+130);
+		blockText.setAttributeNS(null,"style","pointer-events: none;");
+		blockText.setAttribute('width', SET_WIDTH);
+		blockText.setAttributeNS(null,"height",CHRLENGTH);
+		blockText.setAttributeNS(null,"style","pointer-events: none;");
+	}
+//ON CLICK FUNCTION
+	myBlock.onclick = function(){
+		var a = document.getElementById(this.id);
+		var tempstorage=a.id.split('__');
+		if (Selected.includes(a.id)){
+			var index = Selected.indexOf(a.id);
+			Selected.splice(index, 1);     				
+//Change colour to unslected.	
+			console.log(tempstorage[8]);
+			if (tempstorage[8]=="+1"){
+				a.setAttributeNS(null,"fill",FORWARD_COLOR);
+			}else{
+				a.setAttributeNS(null,"fill",REVERSE_COLOR);
+			}          	
+		}else{
+			if(tempstorage[8]==="+1"){
+				a.setAttributeNS(null,"fill",FORWARD_HIGHLIGHT);
+			}else{
+				a.setAttributeNS(null,"fill",REVERSE_HIGHLIGHT);
+		}      
+			Selected.push(a.id)
+		}
+	//refresh text list
+	fill_csv_region();
+
+	}
+
+// ON HOVER FUNCTION
+	myBlock.onmouseenter= function(e) {
+		var supertester = document.getElementById("temp");
+		if (!supertester){
+			var x = e.clientX;
+			var y = e.clientY;
+			var svgP = svgPoint(myBlock, x, y);
+			var mytemp = document.createElementNS(svgNS, 'rect');
+			mytemp.setAttributeNS(null, 'id', "temp");   		
+			mytemp.setAttributeNS(null,"x",svgP.x);
+			mytemp.setAttributeNS(null,"width",400);
+			mytemp.setAttributeNS(null,"y",svgP.y);
+			mytemp.setAttributeNS(null,"height",220);
+			mytemp.setAttributeNS(null,"rx",20);
+			mytemp.setAttributeNS(null,"ry",20);
+			mytemp.setAttributeNS(null,"stroke","black");
+			mytemp.setAttributeNS(null,"stroke-width",1);
+			mytemp.setAttributeNS(null,"fill","white");
+			document.getElementById("BLOCKS_VIEW").appendChild(mytemp);
+//Add text
+			var mytemptext = document.createElementNS(svgNS,"text"); 
+			var xcoord=svgP.x+20;
+			mytemptext.setAttributeNS(null, 'id', "temptext");   		
+			mytemptext.setAttributeNS(null,"style","pointer-events: none;");
+			mytemptext.setAttributeNS(null,"x",xcoord);
+			mytemptext.setAttributeNS(null,"y",svgP.y+20);
+			mytemptext.setAttributeNS(null,"font-size","12px");
+//test if the id for the query genome is found in the database.
+			var tempor = this.id;
+			var tempstorage=tempor.split('__');
+// If not only list REFRENCE\tCHR\n \Total Length Start\nStop\nQuery Start\Stop
+			var REFOUND=false;;
+			var QUERYFOUND=false;
+			Species_details.forEach(function (arrayItem) {
+				if (arrayItem.Taxid ==tempstorage[9]){
+					mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan font-weight="bold">'+"Reference: "+arrayItem.Common_Name+'</tspan>';
+					mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan dy="1em" x="'+xcoord+'">'+"Reference Genome: "+arrayItem.Name + "   "+arrayItem.Assembly+'</tspan>';
+					mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan dy="1em" x="'+xcoord+'">'+"Reference taxID: "+Genome_Name +'</tspan>';
+					REFOUND=true;
+					}
+			});					
+			if (REFOUND==false){
+				mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan font-weight="bold" dy="1em" x="'+xcoord+'">'+"Reference Genome: "+tempstorage[9] +'</tspan>';
+			}
+			mytemptext.setAttributeNS(null,"style","pointer-events: none;");
+			mytemptext.setAttributeNS(null,"style","pointer-events: none;");
+			mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Reference Chromsome: "+tempstorage[0] +'</tspan>';
+			mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Reference Start: "+tempstorage[2] +'</tspan>';
+			mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Reference End: "+tempstorage[3] +'</tspan>';					
+			mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Reference Chromosome Length: "+Math.round(tempstorage[4]/1000000) +"mbp"+'</tspan>';
+			Species_details.forEach(function (arrayItem) {
+				if (arrayItem.Taxid ==tempstorage[5]){
+					mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan font-weight="bold" dy="1em" x="'+xcoord+'">'+"Query: " + arrayItem.Common_Name+'</tspan>';
+					mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan dy="1em" x="'+xcoord+'">'+"Query Genome: "+arrayItem.Name + "   "+arrayItem.Assembly+'</tspan>';
+					mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan dy="1em" x="'+xcoord+'">'+"Query taxID: "+tempstorage[5] +'</tspan>';
+					QUERYFOUND=true;
+				}
+			});					
+			if (QUERYFOUND==false){
+				mytemptext.innerHTML = mytemptext.innerHTML+ '<tspan font-weight="bold" dy="1em" x="'+xcoord+'">'+"Query Genome: "+tempstorage[5] +'</tspan>';
+			}
+
+			mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Query Chromosome: "+tempstorage[1] +'</tspan>';
+			mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Query Start: "+tempstorage[6] +'</tspan>';
+			mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+"Query End: "+tempstorage[7] +'</tspan>';
 // ##############################################################					
-// 					SLOWS IT RIGHT THE FUCK DOWN. NOT WORTH THE EFFORT OF OPTIMIZATION
+// 					SLOWS IT RIGHT THE FUCK DOWN. NOT WORTH THE EFFORT OF OPTIMIZATION 
+// 		Consider fixing it.
 // 					var tempchrome;
 // 					Blocks_DB.forEach(function (arrayItem) {
 // 						if(arrayItem.Taxid==tempstorage[5]){
@@ -871,65 +1332,64 @@ Species_details.forEach(function (arrayItem) {
 // 						});
 // ##############################################################
 					
-					if (tempstorage[8]==-1){
-								mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+'Direction: -</tspan>';
-		
-					}else{
-								mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+'Direction: +</tspan>';
-
-					}					
-
-					
-					
-					document.getElementById("BLOCKS_VIEW").appendChild(mytemptext);
-
-
-
-  				}
-			};
-
-
-       		myBlock.onmouseleave = function(){
-				var c = document.getElementById("temptext");
-				c.remove();       		
-				var b = document.getElementById("temp");
-				b.remove();
-       		}       		
-       		
-			document.getElementById("BLOCKS_VIEW").appendChild(myBlock);
-			if(CHRLENGTH>20){
-				document.getElementById("BLOCKS_VIEW").appendChild(blockText);
-			}
-			
-	}
-// 	Draw the selected here
-	CSV_output="";
-
-	var outputarea = document.getElementById("SELECTED_BLOCKS");
-	var full_list = "SELECTED BLOCKS:REF GENOME, REF CHROMOSOME, REF START,REF END, QUERY START, QUERY END, DIRECTION, QUERY GENOME, QUERY CHROMOSOME"+ "<br>";
-	for(var L=0; L<Selected.length; ++L){
-			tempstorage=Selected[L].split('__');
-			console.log(tempstorage);
-		if(tempstorage[1] != undefined){
-// 		9913,chr1,145018424,145644834,7366807,7825527,ScFKYPt_128144_HRSCAF=131517b
-
-			full_list = full_list +tempstorage[9]+","+tempstorage[0]+","+tempstorage[2]+","+tempstorage[3]+","+tempstorage[6]+","+tempstorage[7]+","+tempstorage[8]+","+tempstorage[5]+","+tempstorage[1]+"<br>";
-			CSV_output=CSV_output +tempstorage[9]+","+tempstorage[0]+","+tempstorage[2]+","+tempstorage[3]+","+tempstorage[6]+","+tempstorage[7]+","+tempstorage[8]+","+tempstorage[5]+","+tempstorage[1]+"\n";
+			if (tempstorage[8]==-1){
+				mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+'Direction: -</tspan>';
+			}else{
+				mytemptext.innerHTML = mytemptext.innerHTML +'<tspan dy="1em" x="'+xcoord+'">'+'Direction: +</tspan>';
+			}					
+			document.getElementById("BLOCKS_VIEW").appendChild(mytemptext);
 		}
-	} 
-	outputarea.innerHTML=full_list;
+	};
+	myBlock.onmouseleave = function(){
+		var c = document.getElementById("temptext");
+		c.remove();       		
+		var b = document.getElementById("temp");
+		b.remove();
+	}       		
+
+
+	document.getElementById("BLOCKS_VIEW").appendChild(myBlock);
+	if(CHRLENGTH>20){
+		document.getElementById("BLOCKS_VIEW").appendChild(blockText);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+fill_csv_region();
+};
+function fill_csv_region(){
+CSV_output="";
+var outputarea = document.getElementById("SELECTED_BLOCKS");
+var full_list = "SELECTED BLOCKS:REF GENOME, REF CHROMOSOME, REF START,REF END, QUERY START, QUERY END, DIRECTION, QUERY GENOME, QUERY CHROMOSOME"+ "<br>";
+for(var L=0; L<Selected.length; ++L){
+	tempstorage=Selected[L].split('__');
+	if(tempstorage[1] != undefined){
+		full_list = full_list +tempstorage[9]+","+tempstorage[0]+","+tempstorage[2]+","+tempstorage[3]+","+tempstorage[6]+","+tempstorage[7]+","+tempstorage[8]+","+tempstorage[5]+","+tempstorage[1]+"<br>";
+		CSV_output=CSV_output +tempstorage[9]+","+tempstorage[0]+","+tempstorage[2]+","+tempstorage[3]+","+tempstorage[6]+","+tempstorage[7]+","+tempstorage[8]+","+tempstorage[5]+","+tempstorage[1]+"\n";
+	}
+} 
+outputarea.innerHTML=full_list;
 	
 };
 // output function for csv
 function save_csv(){
-    var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(CSV_output);
-    hiddenElement.target = '_blank';
-    hiddenElement.download = 'data.csv';
-    hiddenElement.click();
-
+	var hiddenElement = document.createElement('a');
+	hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(CSV_output);
+	hiddenElement.target = '_blank';
+	hiddenElement.download = 'data.csv';
+	hiddenElement.click();
 }
-</script>
 
-   </body>
+</script>
+</body>
 </html>

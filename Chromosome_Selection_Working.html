@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset = "UTF-8">
+    <title>!CHROMOSOMEDISPLAY!</title>
+
+
+</head>
+<body>
+<!-- This button encapsolates the function that would be generated on clicking. Be sure to add the function that incorporates the box. -->
+	<button onclick="Draw_Chromosomes()">
+		Start this baby up
+	</button>
+	<button onclick="Make_box()">
+		Do nothing at the moment
+	</button>
+<!-- 	This is where the refrence chromosomes are displayed -->
+	<div id="RefChromosomes_box" width=100%>
+	    <svg id="RefChromosomes" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="300"></svg>
+    </div>
+    <div id="SELECTED_CHROMOSOMES" width=100%>
+    </div>
+    
+    <script type="text/javascript">
+    
+    // THIS SECTION DRAWS THE CHROMOSMES IN THE mySVG box
+        var svgNS = "http://www.w3.org/2000/svg";  
+        //Replace this line with an extract of the refrence chromosomes
+		var Chromosomes = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"];
+		//Replace this line with an extract of the refrence chromosome Lengths
+		var Positions = [248956422,242193529,198295559,190214555,181538259,170805979,159345973,145138636,138394717,133797422,135086622,133275309,114364328,107043718,101991189,90338345,83257441,80373285,58617616,64444167,46709983,50818468,156040895,57227415];
+		var Length = Positions.length;
+		var Largest= Math.max.apply(Math, Positions);
+		
+		//This is the output
+		const SELECTED = [""];
+
+        function Draw_Chromosomes(){
+                	SELECTED.length = 0;
+        document.getElementById("SELECTED_CHROMOSOMES").innerHTML = "";
+
+       		while (document.getElementById("RefChromosomes").lastChild) {
+   				document.getElementById("RefChromosomes").removeChild(document.getElementById("RefChromosomes").lastChild);
+			}
+			
+			
+			        	//Make box the proper size
+			var newidth=50+100*Length;
+			document.getElementById("RefChromosomes").style.width = newidth;
+			//Draw farY axis
+        	var myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",newidth);
+       		 	myline.setAttributeNS(null,"y1",5);
+            	myline.setAttributeNS(null,"x2",newidth);
+            	myline.setAttributeNS(null,"y2",250);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+                document.getElementById("RefChromosomes").appendChild(myline); 			
+			
+			//Draw Y axis
+        		myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",50);
+       		 	myline.setAttributeNS(null,"y1",5);
+            	myline.setAttributeNS(null,"x2",50);
+            	myline.setAttributeNS(null,"y2",250);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+                document.getElementById("RefChromosomes").appendChild(myline);   			
+			
+        	//Draw X axis
+        	myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",45);
+       		 	myline.setAttributeNS(null,"y1",250);
+            	myline.setAttributeNS(null,"x2",100000);
+            	myline.setAttributeNS(null,"y2",250);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+                document.getElementById("RefChromosomes").appendChild(myline);			
+			
+	        //Draw Top dotted line
+		        myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",45);
+       		 	myline.setAttributeNS(null,"y1",5);
+            	myline.setAttributeNS(null,"x2",100000);
+            	myline.setAttributeNS(null,"y2",5);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+				myline.setAttributeNS(null,"stroke-dasharray","4 4");
+                document.getElementById("RefChromosomes").appendChild(myline);	
+		
+	        //Draw twothird dotted line
+		        myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",45);
+       		 	myline.setAttributeNS(null,"y1",82);
+            	myline.setAttributeNS(null,"x2",100000);
+            	myline.setAttributeNS(null,"y2",82);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+				myline.setAttributeNS(null,"stroke-dasharray","4 4");
+                document.getElementById("RefChromosomes").appendChild(myline);				
+				
+		        //Draw onethird dotted line
+		        myline = document.createElementNS(svgNS,"line"); //to create a circle, for rectangle use rectangle
+            	myline.setAttributeNS(null,"x1",45);
+       		 	myline.setAttributeNS(null,"y1",163);
+            	myline.setAttributeNS(null,"x2",100000);
+            	myline.setAttributeNS(null,"y2",163);
+            	myline.setAttributeNS(null,"stroke","black");
+				myline.setAttributeNS(null,"stroke-width",1);
+				myline.setAttributeNS(null,"stroke-dasharray","4 4");
+                document.getElementById("RefChromosomes").appendChild(myline);		
+                
+                //Draw Y labeL	
+        	var mytext = document.createElementNS(svgNS,"text"); 
+            	mytext.setAttributeNS(null,"x",5);
+       		 	mytext.setAttributeNS(null,"y",125);
+       		 	mytext.setAttributeNS(null,"font-size","12px");       		 	
+            	mytext.innerHTML = "Mbp";
+            	document.getElementById("RefChromosomes").appendChild(mytext);        	
+		//Calculate labels
+			var Tick1=Largest;
+			Tick1=Tick1/3000000;
+			Tick1=Math.round(Tick1);
+			var Tick2=Largest;
+			Tick2=Tick1*2;
+			Tick2=Math.round(Tick2);
+			var Tick3=Largest;
+			Tick3=Tick3/1000000;
+			Tick3=Math.round(Tick3);
+
+        //Draw top tick	label
+        		mytext = document.createElementNS(svgNS,"text"); 
+            	mytext.setAttributeNS(null,"x",25);
+       		 	mytext.setAttributeNS(null,"y",10);
+       		 	mytext.setAttributeNS(null,"font-size","10px");       		 	
+            	mytext.innerHTML = Tick3;
+            	document.getElementById("RefChromosomes").appendChild(mytext); 
+	
+    	//Draw twothird tick label		
+        		mytext = document.createElementNS(svgNS,"text"); 
+            	mytext.setAttributeNS(null,"x",25);
+       		 	mytext.setAttributeNS(null,"y",85);
+       		 	mytext.setAttributeNS(null,"font-size","10px");       		 	
+            	mytext.innerHTML = Tick2;
+            	document.getElementById("RefChromosomes").appendChild(mytext); 	
+        	
+        //Draw onethird tick label		
+        		mytext = document.createElementNS(svgNS,"text"); 
+            	mytext.setAttributeNS(null,"x",25);
+       		 	mytext.setAttributeNS(null,"y",166);
+       		 	mytext.setAttributeNS(null,"font-size","10px");       		 	
+            	mytext.innerHTML = Tick1;
+            	document.getElementById("RefChromosomes").appendChild(mytext); 
+            	
+        //Draw bottom tick label		
+        		mytext = document.createElementNS(svgNS,"text"); 
+            	mytext.setAttributeNS(null,"x",35);
+       		 	mytext.setAttributeNS(null,"y",253);
+       		 	mytext.setAttributeNS(null,"font-size","10px");       		 	
+            	mytext.innerHTML = "0";
+            	document.getElementById("RefChromosomes").appendChild(mytext);         	
+
+ 
+		//Set the parameters for the first chromosome
+		var tempx=75;	
+		//Draw the Chromosomes works, just no click or hover
+         	for (var i = 0; i < Length; i++) {
+          		var myChrome = document.createElementNS(svgNS,"rect");  
+//           		myChrome.setAttributeNS(null,"class",tempx);
+
+	       		var ID=Chromosomes[i] + "CHR";
+          	    myChrome.setAttributeNS(null,"id",Chromosomes[i]);
+            	myChrome.setAttributeNS(null,"x",tempx);
+            	
+            	//set up X position for the next one
+            	var tempx=tempx+100;            	          		
+            	//Calculate the Y Top position (0 for maximum length, 250 for minimum)
+            	// First get the length and divide it by max *250.
+            	var CHRLENGTH=Positions[i]/Largest*250;
+				// set it for length
+				var endpos=250-CHRLENGTH;
+       		 	myChrome.setAttributeNS(null,"y",endpos);
+       		 	myChrome.setAttributeNS(null,"height",CHRLENGTH);
+       		 	// set curviture
+            	myChrome.setAttributeNS(null,"rx",15);
+            	myChrome.setAttributeNS(null,"ry",15);
+            	// set width (standard)
+            	myChrome.setAttributeNS(null,"width",50);
+            	// Set height
+            	myChrome.setAttributeNS(null,"fill","blue");
+            	myChrome.setAttributeNS(null,"stroke","black");
+            	myChrome.setAttributeNS(null,"stroke-width",2);
+            	myChrome.onclick = function(){
+            		var a = document.getElementById(this.id);
+            		// See if it is blue. If so change it to red	
+            		if (a.getAttribute("fill") == "blue") {
+						a.setAttributeNS(null,"fill","red");
+							// update div id="SELECTED_CHROMOSOMES"
+
+						// Add information to ARRAY
+						SELECTED.push(a.id);
+
+
+            		}else{
+            			a.setAttributeNS(null,"fill","blue");
+						var index = SELECTED.indexOf(a.id);
+ 						 SELECTED.splice(index, 1);            	
+            		}
+            		
+            		// LATER UPDATE SECTION. INCLUDE DOWNLOAD LINKS FROM NCBI AND ALL DETAILS WE HAVE AVAILABLE!!!!
+            			
+            			var outputarea = document.getElementById("SELECTED_CHROMOSOMES");
+						var full_list = "SELECTED CHROMOSOMES"+ "<br>";
+						for(var L=0; L<SELECTED.length; ++L){
+						 full_list = full_list + SELECTED[L]+ "<br>";
+						} 
+						outputarea.innerHTML=full_list;
+            		
+            		
+            	}
+
+            	document.getElementById("RefChromosomes").appendChild(myChrome);
+            	// Add text Labels
+            	
+        		var chrtext = document.createElementNS(svgNS,"text"); 
+            	chrtext.setAttributeNS(null,"x",tempx-125);
+       		 	chrtext.setAttributeNS(null,"y",280);
+       		 	chrtext.setAttributeNS(null,"font-size","12px"); 
+       		 	chrtext.setAttributeNS(null,"class","textlabel");
+            	chrtext.innerHTML = "CHROMSOME " + Chromosomes[i];
+            	document.getElementById("RefChromosomes").appendChild(chrtext);  
+
+            }
+
+            
+        }                 
+// 	Function to highlight area when chromosome is clicked on and turn red a new color.
+	function Select_Chromosomes(){
+			window.alert(Length);
+			// Add or remove chromosome from array
+			
+			// Redo coloring of chromosomes
+			
+			//update text display
+			
+			//Generate button for display data
+
+	}
+    </script>
+
+    
+</body>
+</html>
+
+
+
